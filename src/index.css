@@ -6,11 +6,14 @@
 :root {
   /* configurations: consult the xd document */
   --main-width: 1366px;
+  --sec-width: 800px;
 
   /* colors: keep away */
   --color-primary: #2686a3;
   --color-complementary: #00ebdb;
   --color-dark: #565656;
+  --color-success: #00cb4c;
+  --color-warn: #ff3939;
 }
 
 /* body and internal styles */
@@ -35,6 +38,9 @@ a.active {
 .w-main {
   max-width: var(--main-width);
 }
+.w-sec {
+  max-width: var(--sec-width);
+}
 
 /* backgrounds */
 .bg-primary {
@@ -44,4 +50,8 @@ a.active {
 /* foregrounds */
 .text-dark {
   color: var(--color-dark);
+}
+
+.text-primary {
+  color: var(--color-primary);
 }

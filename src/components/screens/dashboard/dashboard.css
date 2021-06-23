@@ -2,7 +2,7 @@
 
 .line {
   width: 2px;
-  height: 100px;
+  height: 140px;
   border-radius: 2px;
 }
 
@@ -19,4 +19,26 @@
     var(--circle-end) 70%
   );
   color: #0082a9;
+}
+
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 2rem;
+}
+.items-grid i {
+  margin-right: 5px;
+  font-size: 14px;
+}
+
+.items-grid i.fas.fa-check {
+  color: var(--color-success);
+}
+.items-grid i.fas.fa-times {
+  color: var(--color-warn);
+}
+
+/* recents */
+.recents .recent-item:nth-child(2n) {
+  background-color: rgb(243, 243, 243);
 }
