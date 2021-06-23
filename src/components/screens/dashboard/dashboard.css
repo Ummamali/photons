@@ -1,0 +1,22 @@
+/* This is the stylesheet for dashboard components and its children */
+
+.line {
+  width: 2px;
+  height: 100px;
+  border-radius: 2px;
+}
+
+/* total circle */
+.total {
+  --circle-end: #4bbfe33a;
+  --circle-start: #00cb4a38;
+  width: 150px;
+  height: 150px;
+  border-radius: 100%;
+  background: linear-gradient(
+    315deg,
+    var(--circle-start),
+    var(--circle-end) 70%
+  );
+  color: #0082a9;
+}
