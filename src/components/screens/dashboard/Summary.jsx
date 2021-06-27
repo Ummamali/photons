@@ -1,17 +1,10 @@
 import React from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function Summary() {
   // hardcoded
-  const contributions = {
-    "Sakhi Baksh": true,
-    "Sakhi Bash": true,
-    "Sakhi Baksh": false,
-    SakhiBaksh: false,
-    "Sakhi aksh": true,
-    "Sakhi aksh": false,
-    "Sakh Baksh": true,
-  };
+  const [contributions, setContributions] = useState({});
   const items = [];
   for (const name in contributions) {
     const icon = contributions[name] ? (
