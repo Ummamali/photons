@@ -85,3 +85,15 @@ export function mapFeedback(reqData, feedbackEls = defaultFeedbackElements) {
     return null;
   }
 }
+
+export function combineLoadStatus(statusArray) {
+  if (statusArray.includes(3) || statusArray.includes(4)) {
+    return 3;
+  } else if (statusArray.includes(0)) {
+    return 0;
+  } else if (statusArray.includes(1)) {
+    return 1;
+  } else {
+    return 2;
+  }
+}
