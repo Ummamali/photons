@@ -1,24 +1,32 @@
 import React from "react";
+import { useEffect } from "react";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { loadStatus } from "../../../store/thisMonthSlice";
 
 export default function Summary() {
-  // hardcoded
-  const [contributions, setContributions] = useState({});
+  const thisMonthStatus = useSelector((state) => state.thisMonth);
+  const contributors = useSelector((state) => state.contributors);
+  const dispatch = useDispatch();
   const items = [];
-  for (const name in contributions) {
-    const icon = contributions[name] ? (
+  for (const userId in thisMonthStatus) {
+    const icon = thisMonthStatus[userId] ? (
       <i className="fas fa-check"></i>
     ) : (
       <i className="fas fa-times"></i>
     );
     items.push(
-      <p>
+      <p key={userId}>
         {icon}
-        {name}
+        {contributors[userId].name}
       </p>
     );
   }
+
+  useEffect(() => {
+    dispatch(loadStatus());
+  }, []);
   return (
     <div className="ml-28">
       <div className="flex items-center mb-4">

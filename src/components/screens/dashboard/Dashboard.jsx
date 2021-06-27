@@ -7,8 +7,15 @@ import Recents from "./Recents";
 
 // importing classes
 import "./dashboard.css";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { loadContributors } from "../../../store/contributorsSlice";
 
 export default function Dashboard() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(loadContributors());
+  }, []);
   return (
     <div className="my-10">
       <div className="flex items-center justify-center mb-10">
