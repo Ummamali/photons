@@ -9,6 +9,7 @@ import useRequest, {
 
 export default function Recents() {
   const [recent, setRecent] = useState([]);
+  const [moreAvailable, setMoreAvailable] = useState(true);
   const contributors = useSelector((state) => state.contributors);
   const [reqData, sendReq] = useRequest();
   const loadStatus = combineLoadStatus([
@@ -33,7 +34,10 @@ export default function Recents() {
           key: item,
         });
       }
-      setRecent(newRecents);
+      if (recentsArray.length < 10) {
+        setMoreAvailable(false);
+      }
+      setRecent((prev) => [...prev, ...newRecents]);
     }
   }, [loadStatus]);
 
@@ -54,9 +58,11 @@ export default function Recents() {
               </div>
             ))}
           </div>
-          <button className="block mx-auto text-primary text-sm">
-            Show More
-          </button>
+          {moreAvailable && (
+            <button className="block mx-auto text-primary text-sm">
+              Show More
+            </button>
+          )}
         </>
       ),
       3: (

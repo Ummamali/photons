@@ -37,7 +37,7 @@ export function loadThisMonth() {
     loadFromServer()
       .then((usersList) => {
         for (const userId in usersList) {
-          usersList[userId] = usersList[userId] > 200;
+          usersList[userId] = usersList[userId] >= 200;
         }
         dispatch(thisMonthActions.replace({ new: usersList }));
       })
