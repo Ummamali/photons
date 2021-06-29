@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadContributors } from "../../../store/contributorsSlice";
 import { loadThisMonth } from "../../../store/thisMonthSlice";
 import { combineLoadStatus, mapFeedback } from "../../../hooks/useRequest";
+import { useRef } from "react";
 
 export default function Dashboard() {
   const thisMonthLS = useSelector((state) => state.thisMonth.loadStatus);
@@ -20,10 +21,18 @@ export default function Dashboard() {
   const loadStatus = combineLoadStatus([thisMonthLS, contributorsLS]);
   const dispatch = useDispatch();
 
+  const dashboardRef = useRef();
+
   useEffect(() => {
     dispatch(loadContributors());
     dispatch(loadThisMonth());
   }, []);
+
+  useEffect(() => {
+    if (loadStatus === 2) {
+      dashboardRef.current.classList.add("opacity-100");
+    }
+  }, [loadStatus]);
 
   const mainBody = mapFeedback(
     { status: loadStatus },
@@ -37,14 +46,14 @@ export default function Dashboard() {
         </div>
       ),
       2: (
-        <>
+        <div ref={dashboardRef}>
           <div className="flex items-center justify-center mb-10">
             <Total />
             <div className="line bg-gray-200"></div>
             <Summary />
           </div>
           <Recents />
-        </>
+        </div>
       ),
       3: <p className="text-red-500 text-center italic">Unable to load Data</p>,
     }

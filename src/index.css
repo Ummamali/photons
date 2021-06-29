@@ -27,6 +27,11 @@ a.active {
   color: var(--color-complementary);
 }
 
+/* inputs place holder  */
+input::placeholder {
+  font-size: 14px;
+  font-style: italic;
+}
 /* utility classes */
 
 /* logo */

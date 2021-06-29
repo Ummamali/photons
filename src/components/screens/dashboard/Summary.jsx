@@ -12,8 +12,6 @@ export default function Summary() {
     contributors.loadStatus,
   ]);
 
-  console.log(loadStatus);
-
   useEffect(() => {
     if (loadStatus === 2) {
       const newSummary = [];
