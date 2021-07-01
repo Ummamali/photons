@@ -9,6 +9,7 @@ const server = {
 server.routes = {
   thismonth: server.URL + "/thismonth",
   contributors: server.URL + "/contributors",
+  checkUser: server.URL + "/check/username",
 };
 
 export { server };

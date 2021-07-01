@@ -7,6 +7,7 @@
   /* configurations: consult the xd document */
   --main-width: 1366px;
   --sec-width: 800px;
+  --small-width: 520px;
 
   /* colors: keep away */
   --color-primary: #2686a3;
@@ -46,6 +47,9 @@ input::placeholder {
 .w-sec {
   max-width: var(--sec-width);
 }
+.w-small {
+  max-width: var(--small-width);
+}
 
 /* backgrounds */
 .bg-primary {
@@ -59,4 +63,17 @@ input::placeholder {
 
 .text-primary {
   color: var(--color-primary);
+}
+
+/* for forms hiding the arrow buttons in number inputs */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }
