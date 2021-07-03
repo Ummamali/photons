@@ -9,15 +9,15 @@ import loadingSrc from "../../media/loader_bars.gif";
 //  3 ====> Invalid (cross will be shown)
 
 const RefFormGroup = forwardRef((props, ref) => {
-  const isInvalid = props.status === 3;
+  const isInvalid = props.vData.vStatus === 3;
   let additionalCls = isInvalid
     ? " bg-red-50 border-red-500 placeholder-red-400 text-red-500"
     : "";
   let icon = null;
   if (!props.hideIcons) {
-    if (props.status === 1) {
+    if (props.vData.vStatus === 1) {
       icon = <Loader addCls="absolute top-1 right-2" w={25} src={loadingSrc} />;
-    } else if (props.status === 2) {
+    } else if (props.vData.vStatus === 2) {
       icon = (
         <i className="fas fa-check-circle absolute top-2.5 right-3 text-green-500"></i>
       );
@@ -28,7 +28,7 @@ const RefFormGroup = forwardRef((props, ref) => {
     }
   }
   return (
-    <div className={props.className}>
+    <div className={"form-group " + (props.className ? props.className : "")}>
       <label htmlFor={props.id} className="block text-gray-500 mb-1">
         {props.label}
       </label>
@@ -52,7 +52,7 @@ const RefFormGroup = forwardRef((props, ref) => {
       </div>
       {isInvalid && (
         <p className="text-red-500 text-opacity-90 text-sm italic mt-1">
-          * {props.invalidText}
+          {props.vData.msg}
         </p>
       )}
     </div>

@@ -1,10 +1,10 @@
-import React from "react";
-import { useState } from "react";
-import { useRef } from "react";
+import React, { useState, useRef, useReducer } from "react";
 import useRequest from "../../../hooks/useRequest";
 import RefFormGroup from "../../utils/RefFormGroup";
 import { server } from "../../../configs";
 import Button from "../../utils/Button";
+
+import useValidator, { vActions } from "../../../hooks/useValidator";
 
 const validators = {
   userName: async (value) => {
@@ -15,17 +15,22 @@ const validators = {
   amount: (value) => value >= 1,
 };
 
+const defaultErrors = {
+  userName: "Invalid User Name has been given",
+  amount: "Invalid amount has been given",
+};
+
 export default function AddContribution() {
   const references = {
     userName: useRef(),
     amount: useRef(),
   };
-  const [reqData, sendRequest] = useRequest();
-  const [validityStatus, setvalidityStatus] = useState({
-    userName: 0,
-    amount: 0,
-  });
 
+  // the validator
+  const [validityStatuses, allValid, dispatchValidator, validate0] =
+    useValidator(defaultErrors, validators, ["userName"]);
+
+  console.log(allValid);
   function submitHandler(e) {
     e.preventDefault();
     for (const group in references) {
@@ -38,33 +43,12 @@ export default function AddContribution() {
     const target = event.target;
     const identity = target.dataset.identity;
     const value = target.value;
-    if (identity === "userName") {
-      setvalidityStatus((prev) => ({ ...prev, [identity]: 1 }));
-      validators[identity](value)
-        .then((isRegistered) => {
-          if (isRegistered) {
-            setvalidityStatus((prev) => ({ ...prev, [identity]: 2 }));
-          } else {
-            setvalidityStatus((prev) => ({ ...prev, [identity]: 3 }));
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          setvalidityStatus((prev) => ({ ...prev, [identity]: 3 }));
-        });
-    } else {
-      const inputValidStatus = validators[identity](value) ? 2 : 3;
-      setvalidityStatus((prev) => ({ ...prev, [identity]: inputValidStatus }));
-    }
+    validate0(identity, value);
   }
 
   function resetValidity(e) {
     const identity = e.target.dataset.identity;
-    setvalidityStatus((prev) => {
-      const state = { ...prev };
-      state[identity] = 0;
-      return state;
-    });
+    dispatchValidator(vActions.RESET({ identity }));
   }
   return (
     <div className="py-10">
@@ -80,8 +64,7 @@ export default function AddContribution() {
               ref={references.userName}
               placeholder="Enter Username Here..."
               type="text"
-              status={validityStatus.userName}
-              invalidText="Invalid User Name has been given"
+              vData={validityStatuses.userName}
               resetValidity={resetValidity}
               validate={validate}
             />
@@ -91,9 +74,8 @@ export default function AddContribution() {
               ref={references.amount}
               placeholder="Enter amount here..."
               type="number"
-              status={validityStatus.amount}
               min={1}
-              invalidText="Invalid amount given"
+              vData={validityStatuses.amount}
               resetValidity={resetValidity}
               validate={validate}
               hideIcons
