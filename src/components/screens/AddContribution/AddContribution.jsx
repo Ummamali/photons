@@ -1,10 +1,11 @@
-import React, { useState, useRef, useReducer } from "react";
-import useRequest from "../../../hooks/useRequest";
+import React, { useRef } from "react";
+// import useRequest from "../../../hooks/useRequest";
 import RefFormGroup from "../../utils/RefFormGroup";
 import { server } from "../../../configs";
 import Button from "../../utils/Button";
 
 import useValidator, { vActions } from "../../../hooks/useValidator";
+import { useEffect } from "react";
 
 const validators = {
   userName: async (value) => {
@@ -27,10 +28,21 @@ export default function AddContribution() {
   };
 
   // the validator
-  const [validityStatuses, allValid, dispatchValidator, validate0] =
-    useValidator(defaultErrors, validators, ["userName"]);
+  const [validityStatuses, dispatchValidator, validate0] = useValidator(
+    defaultErrors,
+    validators,
+    ["userName"]
+  );
+  const { groups: groupsvStatuses, form: formvStatus } = validityStatuses;
+  console.log(formvStatus);
 
-  console.log(allValid);
+  // useEffect(() => {
+  //   if (formvStatus.submit && formvStatus.isValid) {
+  //     console.log("Form is submitting");
+  //   } else {
+  //     console.log("form submission silenced");
+  //   }
+  // }, [formvStatus]);
   function submitHandler(e) {
     e.preventDefault();
     for (const group in references) {
@@ -64,7 +76,7 @@ export default function AddContribution() {
               ref={references.userName}
               placeholder="Enter Username Here..."
               type="text"
-              vData={validityStatuses.userName}
+              vData={groupsvStatuses.userName}
               resetValidity={resetValidity}
               validate={validate}
             />
@@ -75,7 +87,7 @@ export default function AddContribution() {
               placeholder="Enter amount here..."
               type="number"
               min={1}
-              vData={validityStatuses.amount}
+              vData={groupsvStatuses.amount}
               resetValidity={resetValidity}
               validate={validate}
               hideIcons
