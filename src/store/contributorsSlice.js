@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { server } from "../configs";
+import { routes, joinURL } from "../configs";
 
 // every contributor will have userName as key ====> {userName[string], name[string], contributions[{timestapn, amount}[]]}
 
@@ -28,7 +28,7 @@ const contributorsSlice = createSlice({
 const contributorsActions = contributorsSlice.actions;
 
 async function loadFromServer() {
-  const response = await fetch(server.routes.contributors);
+  const response = await fetch(joinURL(routes.contributors));
   const resObj = await response.json();
   return resObj.payload;
 }

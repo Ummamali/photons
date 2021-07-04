@@ -5,7 +5,6 @@ import { server, joinURL } from "../../../configs";
 import Button from "../../utils/Button";
 import useValidator, { vActions } from "../../../hooks/useValidator";
 import Loader from "../../utils/Loader";
-import { Link } from "react-router-dom";
 
 const validators = {
   userName: async (value) => {
@@ -54,7 +53,7 @@ export default function AddContribution() {
           userName: formValues.userName,
           contObject: {
             stamp: Date.now(),
-            amount: formValues.amount,
+            amount: parseInt(formValues.amount),
           },
         };
         console.log("form is submitting...");

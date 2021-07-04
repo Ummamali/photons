@@ -6,15 +6,17 @@ const server = {
 };
 
 // routez for the server
-server.routes = {
+const routes = {
+  recents: "/recents",
   thismonth: "/thismonth",
   contributors: "/contributors",
   checkUser: "/check/username",
   newContribution: "/new/contribution",
 };
+server.routes = routes;
 
 function joinURL(routePath) {
   return server.URL + routePath;
 }
 
-export { server, joinURL };
+export { server, joinURL, routes };

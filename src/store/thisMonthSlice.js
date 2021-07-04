@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { server } from "../configs";
+import { joinURL, routes } from "../configs";
 
 const thisMonthSlice = createSlice({
   name: "month",
@@ -26,7 +26,7 @@ const thisMonthSlice = createSlice({
 const thisMonthActions = thisMonthSlice.actions;
 
 async function loadFromServer() {
-  const response = await fetch(server.routes.thismonth);
+  const response = await fetch(joinURL(routes.thismonth));
   const resObj = await response.json();
   return resObj.payload;
 }

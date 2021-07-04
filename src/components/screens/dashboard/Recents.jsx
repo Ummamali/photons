@@ -6,6 +6,7 @@ import useRequest, {
   combineLoadStatus,
   mapFeedback,
 } from "../../../hooks/useRequest";
+import { routes } from "../../../configs";
 
 export default function Recents() {
   const [recent, setRecent] = useState([]);
@@ -20,7 +21,7 @@ export default function Recents() {
   function getRecents() {
     sendReq({
       method: "GET",
-      route: "/recents",
+      route: routes.recents,
       params: "index=" + recent.length,
     });
   }
