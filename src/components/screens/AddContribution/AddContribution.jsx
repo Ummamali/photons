@@ -1,10 +1,9 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import useRequest, { mapFeedback } from "../../../hooks/useRequest";
 import RefFormGroup from "../../utils/RefFormGroup";
 import { server, joinURL } from "../../../configs";
-import Button from "../../utils/Button";
+import ReqButton from "../../utils/ReqButton";
 import useValidator, { vActions } from "../../../hooks/useValidator";
-import Loader from "../../utils/Loader";
 
 const validators = {
   userName: async (value) => {
@@ -37,6 +36,7 @@ export default function AddContribution() {
 
   // for submitting the form
   const [reqData, sendRequest] = useRequest();
+  const [submissiobStatus, setSubmissionStatus] = useState(0);
 
   function submitHandler(e) {
     e.preventDefault();
@@ -78,33 +78,17 @@ export default function AddContribution() {
     const identity = e.target.dataset.identity;
     dispatchValidator(vActions.RESET({ identity }));
   }
-
-  // the submission request feedback
-  const formFeet = mapFeedback(reqData, {
-    0: (
-      <Button addCls="w-40" type="submit">
-        Add
-      </Button>
-    ),
-    1: (
-      <Button addCls="w-40 italic" type="submit">
-        <Loader w={30} /> Loading...
-      </Button>
-    ),
+  const feedbackEl = mapFeedback(reqData, {
     2: (
-      <div>
-        <p className="text-green-500 italic text-sm">
-          Success! Your contribution has been added!
-        </p>
-      </div>
+      <p className="text-green-500 text-sm italic">
+        <i className="fas fa-check"></i> Success! Your contribution has been
+        added
+      </p>
     ),
     3: (
-      <div>
-        <Button addCls="w-40" type="submit">
-          Add Again
-        </Button>
-        <p>The Request Failed</p>
-      </div>
+      <p className="text-red-500 text-sm italic">
+        <i className="fas fa-exclamation mr-1"></i>Failed to add contribution
+      </p>
     ),
     4: 3,
   });
@@ -121,6 +105,7 @@ export default function AddContribution() {
               label="User Name"
               ref={references.userName}
               placeholder="Enter Username Here..."
+              autoComplete="off"
               type="text"
               vData={validityStatuses.userName}
               resetValidity={resetValidity}
@@ -139,7 +124,12 @@ export default function AddContribution() {
               hideIcons
             />
           </div>
-          {formFeet}
+          <div className="flex items-center">
+            <ReqButton addCls="w-40 mr-4" reqStatus={reqData.status}>
+              Add
+            </ReqButton>
+            {feedbackEl}
+          </div>
         </form>
       </div>
     </div>

@@ -1,0 +1,12 @@
+/* this are the classes for only util components */
+
+/* ReqButton  */
+.req-button.loading {
+  background-color: white;
+  color: #777;
+  border: 1px solid #ddd;
+}
+.req-button:disabled {
+  cursor: not-allowed;
+  opacity: 1;
+}

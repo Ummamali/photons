@@ -41,6 +41,7 @@ const RefFormGroup = forwardRef((props, ref) => {
             additionalCls
           }
           placeholder={props.placeholder}
+          autoComplete={props.autoComplete}
           min={props.min}
           max={props.max}
           ref={ref}
