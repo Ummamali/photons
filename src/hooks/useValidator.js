@@ -5,37 +5,22 @@ import { useReducer, useMemo } from "react";
 // actions
 export const vActions = {
   SET: (payload) => ({ type: "SET", payload: payload }),
-  SET_FORM: (payload) => ({ type: "SET_FORM", payload: payload }),
   RESET: (payload) => ({ type: "RESET", payload: payload }),
-  SUBMITTING: () => ({ type: "SUBMITTING" }),
-  RESET_SUBMISSION: () => ({ type: "RESET_SUBMISSION" }),
 };
 
 function validityReducer(state, action) {
   if (action.type === "SET") {
     const stateCp = { ...state };
-    const groupObject = stateCp.groups[action.payload.identity];
-    stateCp.groups[action.payload.identity] = {
+    const groupObject = stateCp[action.payload.identity];
+    stateCp[action.payload.identity] = {
       ...groupObject,
       ...action.payload.new,
     };
     return stateCp;
   } else if (action.type === "RESET") {
     const stateCp = { ...state };
-    stateCp.groups[action.payload.identity].vStatus = 0;
+    stateCp[action.payload.identity].vStatus = 0;
     return stateCp;
-  } else if (action.type === "SET_FORM") {
-    const stateCp = { ...state };
-    stateCp.form = { ...stateCp.form, ...action.payload.new };
-    return stateCp;
-  } else if (action.type === "SUBMITTING") {
-    const stateCp = { ...state };
-    stateCp.form.submit = true;
-    return state;
-  } else if (action.type === "RESET_SUBMISSION") {
-    const stateCp = { ...state };
-    stateCp.form.submit = false;
-    return state;
   } else {
     console.warn("Found invalid action for reducer");
     return state;
@@ -53,12 +38,13 @@ export default function useValidator(
 
   // Initial value will be calculated only for the first time
   const initialValue = useMemo(() => {
-    const answer = { groups: {}, form: { submit: false, isValid: false } };
+    const answer = {};
     for (const [identity, message] of Object.entries(identityList)) {
-      answer.groups[identity] = { vStatus: 0, msg: message };
+      answer[identity] = { vStatus: 0, msg: message };
     }
     return answer;
   }, []);
+
   const [validityStatuses, dispatchValidity] = useReducer(
     validityReducer,
     initialValue
@@ -66,68 +52,65 @@ export default function useValidator(
 
   // this is the majic function which will validate
   function validate(identity, value, msg = null) {
+    /* 
+    The validate function returns a value if the validator is synchronous
+    and will return a promise if the vaidator is asynchronous 
+    */
     const vFunc = validatorPredicates[identity];
-    let newMessage = msg !== null ? msg : validityStatuses.groups[identity].msg;
+    let newMessage = msg !== null ? msg : identityList[identity];
     if (asyncList.includes(identity)) {
-      // async validation
-      dispatchValidity(
-        vActions.SET({ identity: identity, new: { vStatus: 1 } })
-      );
-      vFunc(value)
-        .then((isValid) => {
-          const newStatus = isValid ? 2 : 3;
-          let formIsValid = false;
-          if (isValid) {
-            formIsValid = overallFormIsValid(validityStatuses.groups, identity);
-          }
-          dispatchValidity(
-            vActions.SET_FORM({ new: { isValid: formIsValid } })
-          );
-          dispatchValidity(
-            vActions.SET({
-              identity: identity,
-              new: { vStatus: newStatus, msg: newMessage },
-            })
-          );
-        })
-        .catch((error) => {
-          dispatchValidity(
-            vActions.SET({
-              identity: identity,
-              new: { vStatus: 3, msg: "Network Error: Failed to validate" },
-            })
-          );
-          dispatchValidity(vActions.SET_FORM({ isValid: false }));
-        });
+      return new Promise((resolve) => {
+        // async validation
+        dispatchValidity(
+          vActions.SET({ identity: identity, new: { vStatus: 1 } })
+        );
+        vFunc(value)
+          .then((isValid) => {
+            const newStatus = isValid ? 2 : 3;
+            dispatchValidity(
+              vActions.SET({
+                identity: identity,
+                new: { vStatus: newStatus, msg: newMessage },
+              })
+            );
+            resolve(isValid);
+          })
+          .catch((error) => {
+            dispatchValidity(
+              vActions.SET({
+                identity: identity,
+                new: { vStatus: 3, msg: "Network Error: Failed to validate" },
+              })
+            );
+            // the rejection has been handled above so the returned value is false
+            resolve(false);
+          });
+      });
     } else {
       // synchronous validation
       const isValid = vFunc(value);
       const newStatus = isValid ? 2 : 3;
-      let formIsValid = false;
-      if (isValid) {
-        formIsValid = overallFormIsValid(validityStatuses.groups, identity);
-      }
-      dispatchValidity(vActions.SET_FORM({ new: { isValid: formIsValid } }));
       dispatchValidity(
         vActions.SET({
           identity: identity,
           new: { vStatus: newStatus, msg: newMessage },
         })
       );
+      return isValid;
     }
   }
   return [validityStatuses, dispatchValidity, validate];
 }
 
-// utility functions
-function overallFormIsValid(groupsStatuses, toIgnore) {
-  let answer = true;
-  for (const [identityName, { vStatus: currGroupStatus }] of Object.entries(
-    groupsStatuses
-  )) {
-    if (currGroupStatus !== 2 && identityName !== toIgnore) {
-      answer = false;
-    }
-  }
-  return answer;
-}
+// // utility functions
+// function overallFormIsValid(groupsStatuses, toIgnore) {
+//   let answer = true;
+//   for (const [identityName, { vStatus: currGroupStatus }] of Object.entries(
+//     groupsStatuses
+//   )) {
+//     if (currGroupStatus !== 2 && identityName !== toIgnore) {
+//       answer = false;
+//     }
+//   }
+//   return answer;
+// }

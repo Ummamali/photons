@@ -6,9 +6,11 @@ const configs = server;
 async function sendRequest(data) {
   let response;
   if (data.method === "GET") {
+    // GET: *method, params, *route
     data.params = typeof data.params === "undefined" ? "" : data.params;
     response = await fetch(configs.URL + data.route + "?" + data.params);
   } else if (data.method === "POST") {
+    // POST: *method, *body (object not jsonified), *route
     const init = {
       method: "POST",
       headers: {
@@ -77,7 +79,11 @@ export function mapFeedback(reqData, feedbackEls = defaultFeedbackElements) {
   const Feedback = feedbackEls[reqData.status];
   if (Feedback !== undefined) {
     if (typeof Feedback === "function") {
+      // it is a component
       return <Feedback resObj={reqData.resObj} />;
+    } else if (typeof Feedback === "number") {
+      // then it is a reference to another feedback key
+      return feedbackEls[Feedback]; // if no feedback element found, its your fault ;)
     } else {
       return Feedback;
     }

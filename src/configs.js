@@ -7,9 +7,14 @@ const server = {
 
 // routez for the server
 server.routes = {
-  thismonth: server.URL + "/thismonth",
-  contributors: server.URL + "/contributors",
-  checkUser: server.URL + "/check/username",
+  thismonth: "/thismonth",
+  contributors: "/contributors",
+  checkUser: "/check/username",
+  newContribution: "/new/contribution",
 };
 
-export { server };
+function joinURL(routePath) {
+  return server.URL + routePath;
+}
+
+export { server, joinURL };
