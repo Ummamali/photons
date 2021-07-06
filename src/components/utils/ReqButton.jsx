@@ -3,6 +3,20 @@ import Loader from "../utils/Loader";
 import "./utils.css";
 
 export default function ReqButton(props) {
+  /*
+
+  API: 
+    props : {
+      *reqStatus: int,
+      *type: String (submit | others),
+      addCls: String,
+      attributes: Object (direct additional attributes for button)
+      }
+
+   This is just a simple button, but with the following properties:
+      >>> If reqStatus === 1 : the button will be disabled and show loading... text 
+      >>> Otherwise, it will show the body
+  */
   let addCls = props.addCls ? props.addCls : "";
   let innerBody = props.children;
   if (props.reqStatus === 1) {

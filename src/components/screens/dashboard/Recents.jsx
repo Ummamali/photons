@@ -49,7 +49,6 @@ export default function Recents() {
       setRecent((prev) => [...prev, ...newRecents]);
     }
   }, [loadStatus]);
-  console.log(reqData.status, loadStatus);
 
   const userFeedback = mapFeedback(
     { status: loadStatus },

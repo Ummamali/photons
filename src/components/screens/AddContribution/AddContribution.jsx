@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import useRequest, { mapFeedback } from "../../../hooks/useRequest";
 import RefFormGroup from "../../utils/RefFormGroup";
 import { server, joinURL } from "../../../configs";
@@ -11,9 +11,15 @@ const validators = {
       `${joinURL(server.routes.checkUser)}?userName=${value}`
     );
     const resObj = await reponse.json();
-    return resObj.payload.isRegistered;
+    const isValid = resObj.payload.isRegistered;
+    const msg = isValid ? null : "This user name does not exists!";
+    return { isValid, msg };
   },
-  amount: (value) => value >= 1,
+  amount: (value) => {
+    const isValid = value > 0;
+    const msg = isValid ? null : "Amount must be greater than zero";
+    return { isValid, msg };
+  },
 };
 
 const defaultErrors = {
@@ -36,7 +42,6 @@ export default function AddContribution() {
 
   // for submitting the form
   const [reqData, sendRequest] = useRequest();
-  const [submissiobStatus, setSubmissionStatus] = useState(0);
 
   function submitHandler(e) {
     e.preventDefault();
@@ -57,7 +62,6 @@ export default function AddContribution() {
           },
         };
         console.log("form is submitting...");
-        console.log(server.routes.newContribution);
         sendRequest({
           method: "POST",
           route: server.routes.newContribution,
@@ -80,9 +84,9 @@ export default function AddContribution() {
   }
   const feedbackEl = mapFeedback(reqData, {
     2: (
-      <p className="text-green-500 text-sm italic">
+      <p className="text-green-500 text-sm italic leading-none">
         <i className="fas fa-check"></i> Success! Your contribution has been
-        added
+        added.
       </p>
     ),
     3: (
@@ -94,11 +98,11 @@ export default function AddContribution() {
   });
   return (
     <div className="py-10">
-      <div>
+      <div className="border border-gray-300 py-12 px-8 w-small mx-auto mt-4 shadow-lg rounded-lg">
         <h2 className="text-center text-3xl text-gray-600 mb-4">
           Add Contribution
         </h2>
-        <form className="block w-small mx-auto" onSubmit={submitHandler}>
+        <form className="block mx-auto" onSubmit={submitHandler}>
           <div className="space-y-2.5 mb-4">
             <RefFormGroup
               id="userName"
@@ -125,7 +129,7 @@ export default function AddContribution() {
             />
           </div>
           <div className="flex items-center">
-            <ReqButton addCls="w-40 mr-4" reqStatus={reqData.status}>
+            <ReqButton addCls="w-36 mr-4" reqStatus={reqData.status}>
               Add
             </ReqButton>
             {feedbackEl}

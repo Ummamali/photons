@@ -4,6 +4,7 @@ import { Switch, Route } from "react-router-dom";
 // The dashboard will be the main root screen
 import Dashboard from "./screens/dashboard/Dashboard";
 import AddContribution from "./screens/AddContribution/AddContribution";
+import RegisterContributor from "./screens/RegisterContributor/RegisterContributor";
 
 // the navigation bar
 import Nav from "./header/Nav";
@@ -17,6 +18,9 @@ export default function App() {
           <Switch>
             <Route path="/add">
               <AddContribution />
+            </Route>
+            <Route path="/register">
+              <RegisterContributor />
             </Route>
             <Route exact path="/">
               <Dashboard />

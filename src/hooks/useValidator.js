@@ -51,13 +51,14 @@ export default function useValidator(
   );
 
   // this is the majic function which will validate
-  function validate(identity, value, msg = null) {
+  function validate(identity, value) {
     /* 
     The validate function returns a value if the validator is synchronous
     and will return a promise if the vaidator is asynchronous 
+
+    Note: the vFunc will return an object {*isValid: boolean, msg: String | null}
     */
     const vFunc = validatorPredicates[identity];
-    let newMessage = msg !== null ? msg : identityList[identity];
     if (asyncList.includes(identity)) {
       return new Promise((resolve) => {
         // async validation
@@ -65,7 +66,12 @@ export default function useValidator(
           vActions.SET({ identity: identity, new: { vStatus: 1 } })
         );
         vFunc(value)
-          .then((isValid) => {
+          .then((validityResponse) => {
+            const isValid = validityResponse.isValid;
+            const newMessage =
+              validityResponse.msg !== null
+                ? validityResponse.msg
+                : identityList[identity];
             const newStatus = isValid ? 2 : 3;
             dispatchValidity(
               vActions.SET({
@@ -88,7 +94,12 @@ export default function useValidator(
       });
     } else {
       // synchronous validation
-      const isValid = vFunc(value);
+      const validityResponse = vFunc(value);
+      const isValid = validityResponse.isValid;
+      const newMessage =
+        validityResponse.msg !== null
+          ? validityResponse.msg
+          : identityList[identity];
       const newStatus = isValid ? 2 : 3;
       dispatchValidity(
         vActions.SET({
