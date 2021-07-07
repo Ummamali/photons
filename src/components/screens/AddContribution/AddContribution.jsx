@@ -41,7 +41,7 @@ export default function AddContribution() {
   );
 
   // for submitting the form
-  const [reqData, sendRequest] = useRequest();
+  const [reqData, sendRequest, resetStatus, startLoading] = useRequest();
 
   function submitHandler(e) {
     e.preventDefault();
@@ -51,6 +51,7 @@ export default function AddContribution() {
       validations.push(validateCore(idName, idRef.current.value));
       formValues[idName] = idRef.current.value;
     }
+    startLoading();
     Promise.all(validations).then((vResolved) => {
       const formIsValid = !vResolved.includes(false);
       if (formIsValid) {
@@ -67,6 +68,9 @@ export default function AddContribution() {
           route: server.routes.newContribution,
           body: body,
         });
+      } else {
+        console.log("form is not valid");
+        resetStatus(true);
       }
     });
   }
@@ -76,6 +80,7 @@ export default function AddContribution() {
     const identity = target.dataset.identity;
     const value = target.value;
     validateCore(identity, value);
+    resetStatus();
   }
 
   function resetValidity(e) {

@@ -3,6 +3,26 @@ import { server } from "../configs";
 
 const configs = server;
 
+/*
+useRequest Hook
+  returns: [reqData, sendRequest, resetStatus, startLoading]
+  Signatures:
+    reqData: {status: 0|1|2|3|4, resObj: Object | Error}
+    sendRequest: void function(data)
+      data: determines the request to be sent
+        > GET: *method, params, *route
+        > POST: *method, *body (object not jsonified), *route
+    resetStatus: void function(hard=false)
+    startLoading: void function()
+
+Status:
+    0 ----> not sent
+    1 -----> request sent, waiting for reply
+    2 ----> response received successfully
+    3 ----> response is ok but resObj is bad
+    4 ----> request failed
+*/
+
 async function sendRequest(data) {
   let response;
   if (data.method === "GET") {
@@ -27,15 +47,6 @@ async function sendRequest(data) {
     throw new Error("Response is not ok");
   }
 }
-
-/*
-Status:
-    0 ----> not sent
-    1 -----> request sent, waiting for reply
-    2 ----> response received successfully
-    3 ----> response is ok but resObj is bad
-    4 ----> request failed
-*/
 
 const initialReqData = {
   status: 0,
@@ -62,7 +73,30 @@ export default function useRequest() {
       });
   }
 
-  return [reqData, sendReq];
+  function resetStatus(hard = false) {
+    /*
+      This will just reset the status to 0 if the request has been resolved if hard is not set.
+       Resets the status without check if hard is true. Resetting (cancelling) the request will be implemented later.    
+    */
+    if (hard) {
+      setReqData({ status: 0, reqObject: null });
+    } else {
+      if (hasResolved(reqData.status)) {
+        setReqData({ status: 0, reqObject: null });
+      }
+    }
+  }
+
+  function startLoading() {
+    // this function sets status to 1
+    setReqData({ status: 1, resObj: null });
+  }
+
+  return [reqData, sendReq, resetStatus, startLoading];
+}
+
+export function hasResolved(reqStatus) {
+  return reqStatus === 2 || (reqStatus === 3) | (reqStatus === 4);
 }
 
 export const defaultFeedbackElements = {

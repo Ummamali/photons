@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { combineLoadStatus } from "../../../hooks/useRequest";
+import { truncate } from "../../../utilFuncs/basics";
 
 export default function Summary() {
   const [summary, setSummary] = useState([]);
@@ -17,7 +18,7 @@ export default function Summary() {
       const newSummary = [];
       for (const userId in thisMonth.data) {
         newSummary.push({
-          name: contributors.data[userId].name,
+          name: truncate(contributors.data[userId].name, 15),
           hasCompleted: thisMonth.data[userId],
         });
       }

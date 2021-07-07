@@ -68,7 +68,7 @@ export default function RegisterContributor() {
   );
 
   // form submission hook
-  const [reqData, sendRequest] = useRequest();
+  const [reqData, sendRequest, resetStatus, startLoading] = useRequest();
 
   function submitHandler(e) {
     e.preventDefault();
@@ -78,6 +78,7 @@ export default function RegisterContributor() {
       validations.push(validateCore(idName, idRef.current.value));
       formValues[idName] = idRef.current.value;
     }
+    startLoading();
     Promise.all(validations).then((vResolved) => {
       const formIsValid = !vResolved.includes(false);
       if (formIsValid) {
@@ -91,6 +92,8 @@ export default function RegisterContributor() {
           route: routes.newContributor,
           body: body,
         });
+      } else {
+        resetStatus(true);
       }
     });
   }
@@ -99,6 +102,7 @@ export default function RegisterContributor() {
     const target = event.target;
     const identity = target.dataset.identity;
     const value = target.value;
+    resetStatus();
     validateCore(identity, value);
   }
 
