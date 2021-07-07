@@ -10,6 +10,8 @@ import { routes, joinURL } from "../../../configs";
 import useRequest, { mapFeedback } from "../../../hooks/useRequest";
 import ReqButton from "../../utils/ReqButton";
 
+import treesSrc from "../../../media/trees.svg";
+
 function containsAlphabets(value) {
   const alphabets = "abcdefghijklmnopqrstuvwxyz";
   for (const character of value) {
@@ -126,7 +128,7 @@ export default function RegisterContributor() {
   });
   return (
     <div className="py-10">
-      <div className="border border-gray-300 w-small py-8 px-5 mx-auto rounded-lg shadow-lg">
+      <div className="border border-gray-300 w-small py-8 px-5 mx-auto rounded-lg shadow-lg z-20 relative bg-white">
         <div className="text-center mb-6">
           <h1 className="text-3xl text-gray-600 mb-3">Register Contributor</h1>
           <p className="leading-none text-gray-500 text-opacity-90 text-sm">
@@ -167,6 +169,11 @@ export default function RegisterContributor() {
           </form>
         </div>
       </div>
+      <img
+        src={treesSrc}
+        alt="Trees"
+        className="w-small absolute bottom-0 left-1/2 transform -translate-x-1/2 z-10"
+      />
     </div>
   );
 }
