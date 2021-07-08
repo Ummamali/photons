@@ -10,8 +10,6 @@ import { routes, joinURL } from "../../../configs";
 import useRequest, { mapFeedback } from "../../../hooks/useRequest";
 import ReqButton from "../../utils/ReqButton";
 
-import treesSrc from "../../../media/trees.svg";
-
 function containsAlphabets(value) {
   const alphabets = "abcdefghijklmnopqrstuvwxyz";
   for (const character of value) {
@@ -127,53 +125,46 @@ export default function RegisterContributor() {
     4: 3,
   });
   return (
-    <div className="py-10">
-      <div className="border border-gray-300 w-small py-8 px-5 mx-auto rounded-lg shadow-lg z-20 relative bg-white">
-        <div className="text-center mb-6">
-          <h1 className="text-3xl text-gray-600 mb-3">Register Contributor</h1>
-          <p className="leading-none text-gray-500 text-opacity-90 text-sm">
-            More contributors, more contributions
-          </p>
-        </div>
-        <div>
-          <form onSubmit={submitHandler}>
-            <div className="space-y-3 mb-5">
-              <RefFormGroup
-                label="User Name"
-                id="userName"
-                ref={references.userName}
-                placeholder="Enter user name (id)...."
-                type="text"
-                vData={validityStatuses.userName}
-                validate={validate}
-                resetValidity={resetValidity}
-                autoComplete="off"
-              />
-              <RefFormGroup
-                label="User Full Name"
-                id="userFullName"
-                ref={references.userFullName}
-                placeholder="Enter user full name...."
-                type="text"
-                vData={validityStatuses.userFullName}
-                validate={validate}
-                resetValidity={resetValidity}
-                autoComplete="off"
-                hideIcons
-              />
-            </div>
-            <div className="flex items-center space-x-4">
-              <ReqButton reqStatus={reqData.status}>Register</ReqButton>
-              {feedbackEl}
-            </div>
-          </form>
-        </div>
+    <div className="w-hard-small py-12 px-8 mx-auto rounded-lg shadow-lg bg-white">
+      <div className="text-center mb-6">
+        <h1 className="text-3xl text-gray-600 mb-3">Register Contributor</h1>
+        <p className="leading-none text-gray-500 text-opacity-90 text-sm">
+          More contributors, more contributions
+        </p>
       </div>
-      <img
-        src={treesSrc}
-        alt="Trees"
-        className="w-small absolute bottom-0 left-1/2 transform -translate-x-1/2 z-10"
-      />
+      <div>
+        <form onSubmit={submitHandler}>
+          <div className="space-y-3 mb-5">
+            <RefFormGroup
+              label="User Name"
+              id="userName"
+              ref={references.userName}
+              placeholder="Enter user name (id)...."
+              type="text"
+              vData={validityStatuses.userName}
+              validate={validate}
+              resetValidity={resetValidity}
+              autoComplete="off"
+            />
+            <RefFormGroup
+              label="User Full Name"
+              id="userFullName"
+              ref={references.userFullName}
+              placeholder="Enter user full name...."
+              type="text"
+              vData={validityStatuses.userFullName}
+              validate={validate}
+              resetValidity={resetValidity}
+              autoComplete="off"
+              hideIcons
+            />
+          </div>
+          <div className="flex items-center space-x-4">
+            <ReqButton reqStatus={reqData.status}>Register</ReqButton>
+            {feedbackEl}
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

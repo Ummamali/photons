@@ -102,45 +102,43 @@ export default function AddContribution() {
     4: 3,
   });
   return (
-    <div className="py-10">
-      <div className="border border-gray-300 py-12 px-8 w-small mx-auto mt-4 shadow-lg rounded-lg">
-        <h2 className="text-center text-3xl text-gray-600 mb-4">
-          Add Contribution
-        </h2>
-        <form className="block mx-auto" onSubmit={submitHandler}>
-          <div className="space-y-2.5 mb-4">
-            <RefFormGroup
-              id="userName"
-              label="User Name"
-              ref={references.userName}
-              placeholder="Enter Username Here..."
-              autoComplete="off"
-              type="text"
-              vData={validityStatuses.userName}
-              resetValidity={resetValidity}
-              validate={validate}
-            />
-            <RefFormGroup
-              id="amount"
-              label="Amount"
-              ref={references.amount}
-              placeholder="Enter amount here..."
-              type="number"
-              min={1}
-              vData={validityStatuses.amount}
-              resetValidity={resetValidity}
-              validate={validate}
-              hideIcons
-            />
-          </div>
-          <div className="flex items-center">
-            <ReqButton addCls="w-36 mr-4" reqStatus={reqData.status}>
-              Add
-            </ReqButton>
-            {feedbackEl}
-          </div>
-        </form>
-      </div>
+    <div className="bg-white px-8 py-12 w-hard-small rounded-lg">
+      <h2 className="text-center text-3xl text-gray-700 mb-4">
+        Add Contribution
+      </h2>
+      <form className="block mx-auto" onSubmit={submitHandler}>
+        <div className="space-y-2.5 mb-4">
+          <RefFormGroup
+            id="userName"
+            label="User Name"
+            ref={references.userName}
+            placeholder="Enter Username Here..."
+            autoComplete="off"
+            type="text"
+            vData={validityStatuses.userName}
+            resetValidity={resetValidity}
+            validate={validate}
+          />
+          <RefFormGroup
+            id="amount"
+            label="Amount"
+            ref={references.amount}
+            placeholder="Enter amount here..."
+            type="number"
+            min={1}
+            vData={validityStatuses.amount}
+            resetValidity={resetValidity}
+            validate={validate}
+            hideIcons
+          />
+        </div>
+        <div className="flex items-center">
+          <ReqButton addCls="w-36 mr-4" reqStatus={reqData.status}>
+            Add
+          </ReqButton>
+          {feedbackEl}
+        </div>
+      </form>
     </div>
   );
 }

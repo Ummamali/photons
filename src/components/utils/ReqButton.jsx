@@ -1,6 +1,5 @@
 import React from "react";
 import Loader from "../utils/Loader";
-import "./utils.css";
 
 export default function ReqButton(props) {
   /*

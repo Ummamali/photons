@@ -2,9 +2,7 @@ import React from "react";
 import { Switch, Route } from "react-router-dom";
 
 // The dashboard will be the main root screen
-import Dashboard from "./screens/dashboard/Dashboard";
-import AddContribution from "./screens/AddContribution/AddContribution";
-import RegisterContributor from "./screens/RegisterContributor/RegisterContributor";
+import Home from "./screens/home/Home";
 
 // the navigation bar
 import Nav from "./header/Nav";
@@ -16,14 +14,8 @@ export default function App() {
       <main className="px-8">
         <div className="w-main mx-auto">
           <Switch>
-            <Route path="/add">
-              <AddContribution />
-            </Route>
-            <Route path="/register">
-              <RegisterContributor />
-            </Route>
-            <Route exact path="/">
-              <Dashboard />
+            <Route path="/">
+              <Home />
             </Route>
           </Switch>
         </div>

@@ -50,6 +50,9 @@ input::placeholder {
 .w-small {
   max-width: var(--small-width);
 }
+.w-hard-small {
+  width: var(--small-width);
+}
 
 /* backgrounds */
 .bg-primary {

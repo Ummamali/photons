@@ -12,7 +12,7 @@ export default function Nav() {
           <NavLink exact to="/">
             Dashboard
           </NavLink>
-          <NavLink exact to="/add">
+          <NavLink exact to="/contribute">
             Contribute
           </NavLink>
           <NavLink exact to="/register">

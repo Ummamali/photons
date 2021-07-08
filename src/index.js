@@ -10,6 +10,7 @@ import mainStore from "./store/mainStore";
 // stylesheets
 import "./index.css";
 import "./lib.css";
+import "./components/utils/utils.css";
 
 ReactDOM.render(
   <Provider store={mainStore}>

@@ -1,4 +1,12 @@
 /* this are the classes for only util components */
+/* 
+import this utility stylesheet at the root level
+No component is importing the stylesheet so you have to do it manually
+*/
+
+:root {
+  --backdrop: #000000b4;
+}
 
 /* ReqButton  */
 .req-button.loading {
@@ -9,4 +17,24 @@
 .req-button:disabled {
   cursor: not-allowed;
   opacity: 1;
+}
+
+/* model classes */
+/* model uses portals so pbody should have id >> model */
+#model .backdrop {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--backdrop);
+  z-index: 100;
+  backdrop-filter: blur(2.5px);
+}
+#model .model-card {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 110;
 }

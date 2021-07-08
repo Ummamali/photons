@@ -1,38 +1,35 @@
 import React from "react";
+import { Route, useHistory } from "react-router-dom";
 
-// total and summary in a row
-import Total from "./Total";
-import Summary from "./Summary";
-import Recents from "./Recents";
 import Loader from "../../utils/Loader";
 
+// dashboard
+import Dashboard from "./Dashboard";
+
+// model and two forms
+import Model from "../../utils/Model";
+import AddContribution from "./AddContribution";
+import RegisterContributor from "./RegisterContributor";
+
 // importing classes
-import "./dashboard.css";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loadContributors } from "../../../store/contributorsSlice";
 import { loadThisMonth } from "../../../store/thisMonthSlice";
 import { combineLoadStatus, mapFeedback } from "../../../hooks/useRequest";
-import { useRef } from "react";
 
-export default function Dashboard() {
+export default function Home() {
   const thisMonthLS = useSelector((state) => state.thisMonth.loadStatus);
   const contributorsLS = useSelector((state) => state.contributors.loadStatus);
   const loadStatus = combineLoadStatus([thisMonthLS, contributorsLS]);
   const dispatch = useDispatch();
 
-  const dashboardRef = useRef();
+  const historyObj = useHistory();
 
   useEffect(() => {
     dispatch(loadContributors());
     dispatch(loadThisMonth());
   }, []);
-
-  useEffect(() => {
-    if (loadStatus === 2) {
-      dashboardRef.current.classList.add("opacity-100");
-    }
-  }, [loadStatus]);
 
   const mainBody = mapFeedback(
     { status: loadStatus },
@@ -45,19 +42,28 @@ export default function Dashboard() {
           </p>
         </div>
       ),
-      2: (
-        <div ref={dashboardRef}>
-          <div className="flex items-center justify-center mb-10">
-            <Total />
-            <div className="line bg-gray-200"></div>
-            <Summary />
-          </div>
-          <Recents />
-        </div>
-      ),
+      2: <Dashboard />,
       3: <p className="text-red-500 text-center italic">Unable to load Data</p>,
     }
   );
 
-  return <div className="my-10">{mainBody}</div>;
+  function closeModel() {
+    historyObj.push("/");
+  }
+
+  return (
+    <div className="my-10">
+      <Route exact path="/contribute">
+        <Model onClose={closeModel}>
+          <AddContribution />
+        </Model>
+      </Route>
+      <Route path="/register">
+        <Model onClose={closeModel}>
+          <RegisterContributor />
+        </Model>
+      </Route>
+      {mainBody}
+    </div>
+  );
 }
