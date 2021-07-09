@@ -1,71 +1,32 @@
 import React, { useEffect } from "react";
-import Loader from "../../utils/Loader";
-import { useState } from "react";
 import { useSelector } from "react-redux";
-import useRequest, {
-  combineLoadStatus,
-  mapFeedback,
-} from "../../../hooks/useRequest";
-import { routes } from "../../../configs";
+import { combineLoadStatus } from "../../../hooks/useRequest";
+import { useState } from "react";
 
 export default function Recents() {
-  const [recent, setRecent] = useState([]);
-  const [moreAvailable, setMoreAvailable] = useState(true);
+  const [recentList, setRecentList] = useState([]);
   const contributors = useSelector((state) => state.contributors);
-  const [reqData, sendReq] = useRequest();
+  const recentsGlobal = useSelector((state) => state.recents);
   const loadStatus = combineLoadStatus([
-    reqData.status,
+    recentsGlobal.loadStatus,
     contributors.loadStatus,
   ]);
-
-  function getRecents() {
-    sendReq({
-      method: "GET",
-      route: routes.recents,
-      params: "index=" + recent.length,
-    });
-  }
-
-  useEffect(() => {
-    getRecents();
-  }, []);
-
   useEffect(() => {
     if (loadStatus === 2) {
-      const recentsArray = reqData.resObj.payload;
-      const newRecents = [];
-      for (const item of recentsArray) {
-        let [userId, contIndex] = item.split("/");
-        contIndex = parseInt(contIndex);
-        newRecents.push({
-          name: contributors.data[userId].name,
-          amount: contributors.data[userId].contributions[contIndex].amount,
+      const newRecentList = [];
+      for (const item of recentsGlobal.data.list) {
+        let [userId, index] = item.split("/");
+        index = parseInt(index);
+        const userObj = contributors.data[userId];
+        newRecentList.push({
           key: item,
+          name: userObj.name,
+          amount: userObj.contributions[index].amount,
         });
       }
-      if (recentsArray.length < 10) {
-        setMoreAvailable(false);
-      }
-      setRecent((prev) => [...prev, ...newRecents]);
+      setRecentList(newRecentList);
     }
   }, [loadStatus]);
-
-  const userFeedback = mapFeedback(
-    { status: loadStatus },
-    {
-      1: (
-        <div className="flex items-center justify-center">
-          <Loader w={50} addCls="" />
-          <p className="text-sm text-gray-700">Loading...</p>
-        </div>
-      ),
-      3: (
-        <p className="text-red-400 italic text-center">
-          Unable to get data from the server!!!
-        </p>
-      ),
-    }
-  );
 
   return (
     <div>
@@ -73,7 +34,7 @@ export default function Recents() {
         Recent Contributions
       </h2>
       <div className="recents mb-3 w-sec mx-auto">
-        {recent.map((item) => (
+        {recentList.map((item) => (
           <div
             className="flex items-center justify-between px-28 py-2 recent-item"
             key={item.key}
@@ -83,15 +44,15 @@ export default function Recents() {
           </div>
         ))}
       </div>
-      {userFeedback}
-      {moreAvailable && (
+
+      {/* {moreAvailable && (
         <button
           className="block mx-auto text-primary text-sm"
           onClick={getRecents}
         >
           Show More
         </button>
-      )}
+      )} */}
     </div>
   );
 }

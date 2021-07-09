@@ -5,7 +5,7 @@ No component is importing the stylesheet so you have to do it manually
 */
 
 :root {
-  --backdrop: #000000b4;
+  --backdrop: #000000c0;
 }
 
 /* ReqButton  */

@@ -1,26 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { joinURL, routes } from "../configs";
+import {
+  asyncSliceReducers,
+  asyncSliceInitial,
+  generateAsyncThunk,
+} from "./shared";
 
 const thisMonthSlice = createSlice({
   name: "month",
-  initialState: {
-    loadStatus: 0,
-    data: {},
-  },
-  reducers: {
-    replace: (state, action) => {
-      for (const key in action.payload.new) {
-        state.data[key] = action.payload.new[key];
-      }
-      state.loadStatus = 2;
-    },
-    startLoading: (state) => {
-      state.loadStatus = 1;
-    },
-    failedLoading: (state) => {
-      state.loadStatus = 3;
-    },
-  },
+  initialState: asyncSliceInitial,
+  reducers: asyncSliceReducers,
 });
 
 const thisMonthActions = thisMonthSlice.actions;
@@ -31,20 +20,8 @@ async function loadFromServer() {
   return resObj.payload;
 }
 
-export function loadThisMonth() {
-  return (dispatch) => {
-    dispatch(thisMonthActions.startLoading());
-    loadFromServer()
-      .then((usersList) => {
-        for (const userId in usersList) {
-          usersList[userId] = usersList[userId] >= 200;
-        }
-        dispatch(thisMonthActions.replace({ new: usersList }));
-      })
-      .catch((error) => {
-        console.log(error);
-        dispatch(thisMonthActions.failedLoading());
-      });
-  };
-}
+export const loadThisMonth = generateAsyncThunk(
+  thisMonthActions,
+  loadFromServer
+);
 export default thisMonthSlice;

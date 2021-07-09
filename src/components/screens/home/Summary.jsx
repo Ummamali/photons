@@ -19,7 +19,7 @@ export default function Summary() {
       for (const userId in thisMonth.data) {
         newSummary.push({
           name: truncate(contributors.data[userId].name, 15),
-          hasCompleted: thisMonth.data[userId],
+          hasCompleted: thisMonth.data[userId] >= 200,
         });
       }
       setSummary(newSummary);
