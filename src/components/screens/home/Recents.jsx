@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { combineLoadStatus } from "../../../hooks/useRequest";
 import { useState } from "react";
+import { loadMoreRecents } from "../../../store/recentsSlice";
 
 export default function Recents() {
   const [recentList, setRecentList] = useState([]);
@@ -11,6 +12,7 @@ export default function Recents() {
     recentsGlobal.loadStatus,
     contributors.loadStatus,
   ]);
+  const dispatch = useDispatch();
   useEffect(() => {
     if (loadStatus === 2) {
       const newRecentList = [];
@@ -26,7 +28,7 @@ export default function Recents() {
       }
       setRecentList(newRecentList);
     }
-  }, [loadStatus]);
+  }, [loadStatus, recentsGlobal.data.list, contributors.data]);
 
   return (
     <div>
@@ -44,15 +46,14 @@ export default function Recents() {
           </div>
         ))}
       </div>
-
-      {/* {moreAvailable && (
+      {recentsGlobal.data.moreAvailable && (
         <button
           className="block mx-auto text-primary text-sm"
-          onClick={getRecents}
+          onClick={() => dispatch(loadMoreRecents())}
         >
           Show More
         </button>
-      )} */}
+      )}
     </div>
   );
 }

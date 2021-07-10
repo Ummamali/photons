@@ -9,10 +9,16 @@ import {
 const thisMonthSlice = createSlice({
   name: "month",
   initialState: asyncSliceInitial,
-  reducers: asyncSliceReducers,
+  reducers: {
+    ...asyncSliceReducers,
+    add: (state, action) => {
+      // action.payload >>> String (the userName)
+      state[action.payload] = 0;
+    },
+  },
 });
 
-const thisMonthActions = thisMonthSlice.actions;
+export const thisMonthActions = thisMonthSlice.actions;
 
 async function loadFromServer() {
   const response = await fetch(joinURL(routes.thismonth));

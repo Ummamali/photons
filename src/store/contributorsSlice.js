@@ -6,15 +6,29 @@ import {
   generateAsyncThunk,
 } from "./shared";
 
-// every contributor will have userName as key ====> {userName[string], name[string], contributions[{timestapn, amount}[]]}
+/*
+ every contributor will have userName (id) as key >>> {id[string], name[string], contributions[{timestapn, amount}[]]}*/
 
 const contributorsSlice = createSlice({
   name: "contributors",
   initialState: asyncSliceInitial,
-  reducers: asyncSliceReducers,
+  reducers: {
+    ...asyncSliceReducers,
+    add: (state, action) => {
+      /*
+       action.payload >>> 
+        {
+          *userObj: { *id:String, *name:String}
+       }
+      */
+      const user = action.payload.userObj;
+      user.contributions = [];
+      state.data[user.id] = user;
+    },
+  },
 });
 
-const contributorsActions = contributorsSlice.actions;
+export const contributorsActions = contributorsSlice.actions;
 
 async function loadFromServer() {
   const response = await fetch(joinURL(routes.contributors));

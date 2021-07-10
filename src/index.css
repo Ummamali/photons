@@ -33,6 +33,11 @@ input::placeholder {
   font-size: 14px;
   font-style: italic;
 }
+
+/* buttons */
+button:focus {
+  outline: none !important;
+}
 /* utility classes */
 
 /* logo */
