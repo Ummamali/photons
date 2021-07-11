@@ -57,8 +57,8 @@ export default function useRequest() {
   const [reqData, setReqData] = useState(initialReqData);
 
   function sendReq(data) {
-    /* Returns a promise which resolves to resObject if the request succeeded at the network layer. The promise never gets rejected cuz the rejection has been handled by the states */
-    return new Promise((resolve) => {
+    /* Returns a promise which resolves to resObject if the request succeeded at the network layer. The promise gets rejected to the same error*/
+    return new Promise((resolve, reject) => {
       setReqData({ status: 1, resObj: null });
       sendRequest(data)
         .then((resObj) => {
@@ -69,6 +69,7 @@ export default function useRequest() {
         })
         .catch((error) => {
           setReqData({ status: 4, resObj: error });
+          reject(error);
         });
     });
   }
