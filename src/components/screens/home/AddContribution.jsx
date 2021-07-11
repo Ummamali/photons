@@ -6,6 +6,7 @@ import ReqButton from "../../utils/ReqButton";
 import useValidator, { vActions } from "../../../hooks/useValidator";
 import { useDispatch } from "react-redux";
 import { addContributionThnuk } from "../../../store/thunks";
+import { clearFields } from "../../../utilFuncs/basics";
 
 const validators = {
   userName: async (value) => {
@@ -84,6 +85,7 @@ export default function AddContribution() {
                 resObj.payload.recentString
               )
             );
+            // here we have to reset the form
           }
         });
       } else {
