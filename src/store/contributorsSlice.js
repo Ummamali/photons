@@ -14,7 +14,7 @@ const contributorsSlice = createSlice({
   initialState: asyncSliceInitial,
   reducers: {
     ...asyncSliceReducers,
-    add: (state, action) => {
+    addContributor: (state, action) => {
       /*
        action.payload >>> 
         {
@@ -24,6 +24,12 @@ const contributorsSlice = createSlice({
       const user = action.payload.userObj;
       user.contributions = [];
       state.data[user.id] = user;
+    },
+    addContribution: (state, action) => {
+      // action.payload >>> {*userName: String, *contObj: object}
+      state.data[action.payload.userName].contributions.push(
+        action.payload.contObj
+      );
     },
   },
 });

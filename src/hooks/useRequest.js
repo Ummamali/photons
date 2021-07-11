@@ -57,20 +57,20 @@ export default function useRequest() {
   const [reqData, setReqData] = useState(initialReqData);
 
   function sendReq(data) {
-    setReqData({ status: 1, resObj: null });
-    sendRequest(data)
-      .then((resObj) => {
-        let statusCode;
-        if (resObj.status === 200) {
-          statusCode = 2;
-        } else {
-          statusCode = 3;
-        }
-        setReqData({ status: statusCode, resObj: resObj });
-      })
-      .catch((error) => {
-        setReqData({ status: 4, resObj: error });
-      });
+    /* Returns a promise which resolves to resObject if the request succeeded at the network layer. The promise never gets rejected cuz the rejection has been handled by the states */
+    return new Promise((resolve) => {
+      setReqData({ status: 1, resObj: null });
+      sendRequest(data)
+        .then((resObj) => {
+          // the backend must return an internal status of 200 to indicate success. Any other status will be considered as bad.
+          const statusCode = resObj.status === 200 ? 2 : 3;
+          setReqData({ status: statusCode, resObj: resObj });
+          resolve(resObj);
+        })
+        .catch((error) => {
+          setReqData({ status: 4, resObj: error });
+        });
+    });
   }
 
   function resetStatus(hard = false) {

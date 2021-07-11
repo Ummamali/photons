@@ -4,7 +4,7 @@ import { Route, useHistory } from "react-router-dom";
 import Loader from "../../utils/Loader";
 
 // dashboard
-import Dashboard from "./Dashboard";
+import Dashboard from "./dashboard/Dashboard";
 
 // model and two forms
 import Model from "../../utils/Model";

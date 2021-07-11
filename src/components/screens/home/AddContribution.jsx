@@ -4,6 +4,8 @@ import RefFormGroup from "../../utils/RefFormGroup";
 import { server, joinURL } from "../../../configs";
 import ReqButton from "../../utils/ReqButton";
 import useValidator, { vActions } from "../../../hooks/useValidator";
+import { useDispatch } from "react-redux";
+import { addContributionThnuk } from "../../../store/thunks";
 
 const validators = {
   userName: async (value) => {
@@ -43,6 +45,10 @@ export default function AddContribution() {
   // for submitting the form
   const [reqData, sendRequest, resetStatus, startLoading] = useRequest();
 
+  // for dispatching
+  const dispatchGlobal = useDispatch();
+
+  // for submitting the form
   function submitHandler(e) {
     e.preventDefault();
     const validations = [];
@@ -55,18 +61,30 @@ export default function AddContribution() {
     Promise.all(validations).then((vResolved) => {
       const formIsValid = !vResolved.includes(false);
       if (formIsValid) {
+        // the contribution object to be added to users list
+        const contObj = {
+          stamp: Date.now(),
+          amount: parseInt(formValues.amount),
+        };
         const body = {
           userName: formValues.userName,
-          contObject: {
-            stamp: Date.now(),
-            amount: parseInt(formValues.amount),
-          },
+          contObject: contObj,
         };
         console.log("form is submitting...");
         sendRequest({
           method: "POST",
           route: server.routes.newContribution,
           body: body,
+        }).then((resObj) => {
+          if (resObj.status === 200) {
+            dispatchGlobal(
+              addContributionThnuk(
+                formValues.userName,
+                contObj,
+                resObj.payload.recentString
+              )
+            );
+          }
         });
       } else {
         console.log("form is not valid");

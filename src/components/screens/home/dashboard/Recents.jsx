@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { combineLoadStatus } from "../../../hooks/useRequest";
+import { combineLoadStatus } from "../../../../hooks/useRequest";
 import { useState } from "react";
-import { loadMoreRecents } from "../../../store/recentsSlice";
+import { loadMoreRecents } from "../../../../store/recentsSlice";
 
 export default function Recents() {
   const [recentList, setRecentList] = useState([]);

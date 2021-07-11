@@ -11,9 +11,13 @@ const thisMonthSlice = createSlice({
   initialState: asyncSliceInitial,
   reducers: {
     ...asyncSliceReducers,
-    add: (state, action) => {
+    addContributor: (state, action) => {
       // action.payload >>> String (the userName)
-      state[action.payload] = 0;
+      state.data[action.payload] = 0;
+    },
+    increment: (state, action) => {
+      // action.payload >>> {userName: String, amount: int}
+      state.data[action.payload.userName] += action.payload.amount;
     },
   },
 });

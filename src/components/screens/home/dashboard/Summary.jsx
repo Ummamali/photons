@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { combineLoadStatus } from "../../../hooks/useRequest";
-import { truncate } from "../../../utilFuncs/basics";
+import { combineLoadStatus } from "../../../../hooks/useRequest";
+import { truncate } from "../../../../utilFuncs/basics";
 
 export default function Summary() {
   const [summary, setSummary] = useState([]);
@@ -18,13 +18,17 @@ export default function Summary() {
       const newSummary = [];
       for (const userId in thisMonth.data) {
         newSummary.push({
+          key: userId,
           name: truncate(contributors.data[userId].name, 15),
           hasCompleted: thisMonth.data[userId] >= 200,
         });
+        if (newSummary.length >= 9) {
+          break;
+        }
       }
       setSummary(newSummary);
     }
-  }, [loadStatus]);
+  }, [loadStatus, thisMonth.data]);
 
   return (
     <div className="ml-28">
@@ -42,7 +46,7 @@ export default function Summary() {
             <i className="fas fa-times"></i>
           );
           return (
-            <li key={item.name}>
+            <li key={item.key}>
               {icon}
               {item.name}
             </li>
