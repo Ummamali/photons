@@ -71,7 +71,7 @@ export default function AddContribution() {
           userName: formValues.userName,
           contObject: contObj,
         };
-        console.log("form is submitting...");
+        // console.log("form is submitting...");
         sendRequest({
           method: "POST",
           route: server.routes.newContribution,
@@ -86,10 +86,13 @@ export default function AddContribution() {
               )
             );
             // here we have to reset the form
+            references.userName.current.focus();
+            clearFields(references);
+            dispatchValidator(vActions.RESETALL());
           }
         });
       } else {
-        console.log("form is not valid");
+        // console.log("form is not valid");
         resetStatus(true);
       }
     });
@@ -100,7 +103,6 @@ export default function AddContribution() {
     const identity = target.dataset.identity;
     const value = target.value;
     validateCore(identity, value);
-    resetStatus();
   }
 
   function resetValidity(e) {

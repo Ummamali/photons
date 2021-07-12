@@ -4,8 +4,9 @@ import { useReducer, useMemo } from "react";
 
 // actions
 export const vActions = {
-  SET: (payload) => ({ type: "SET", payload: payload }),
-  RESET: (payload) => ({ type: "RESET", payload: payload }),
+  SET: (payload) => ({ type: "SET", payload }),
+  RESET: (payload) => ({ type: "RESET", payload }),
+  RESETALL: (payload) => ({ type: "RESETALL", payload }),
 };
 
 function validityReducer(state, action) {
@@ -20,6 +21,12 @@ function validityReducer(state, action) {
   } else if (action.type === "RESET") {
     const stateCp = { ...state };
     stateCp[action.payload.identity].vStatus = 0;
+    return stateCp;
+  } else if (action.type === "RESETALL") {
+    const stateCp = { ...state };
+    for (const vObject of Object.values(stateCp)) {
+      vObject.vStatus = 0;
+    }
     return stateCp;
   } else {
     console.warn("Found invalid action for reducer");
@@ -112,16 +119,3 @@ export default function useValidator(
   }
   return [validityStatuses, dispatchValidity, validate];
 }
-
-// // utility functions
-// function overallFormIsValid(groupsStatuses, toIgnore) {
-//   let answer = true;
-//   for (const [identityName, { vStatus: currGroupStatus }] of Object.entries(
-//     groupsStatuses
-//   )) {
-//     if (currGroupStatus !== 2 && identityName !== toIgnore) {
-//       answer = false;
-//     }
-//   }
-//   return answer;
-// }
