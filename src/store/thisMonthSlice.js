@@ -7,7 +7,7 @@ import {
 } from "./shared";
 
 const thisMonthSlice = createSlice({
-  name: "month",
+  name: "thisMonth",
   initialState: asyncSliceInitial,
   reducers: {
     ...asyncSliceReducers,
@@ -31,6 +31,7 @@ async function loadFromServer() {
 }
 
 export const loadThisMonth = generateAsyncThunk(
+  "thisMonth",
   thisMonthActions,
   loadFromServer
 );

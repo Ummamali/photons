@@ -33,11 +33,9 @@ export default function Home() {
   const historyObj = useHistory();
 
   useEffect(() => {
-    if (loadStatus !== 2) {
-      dispatch(loadContributors());
-      dispatch(loadThisMonth());
-      dispatch(loadRecents());
-    }
+    dispatch(loadContributors());
+    dispatch(loadThisMonth());
+    dispatch(loadRecents());
   }, []);
 
   const mainBody = mapFeedback(

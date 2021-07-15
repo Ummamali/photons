@@ -31,14 +31,11 @@ export default function Summary() {
   }, [loadStatus, thisMonth.data]);
 
   return (
-    <div className="ml-28">
-      <div className="flex items-center mb-4">
-        <h2 className="ml-auto text-2xl mr-4 text-gray-700">This Month</h2>
-        <Link to="/more" className="mr-auto text-primary mt-1 text-sm">
-          Show More
-        </Link>
-      </div>
-      <ul className="items-grid">
+    <div className="ml-28 summary rounded px-8 py-4 border border-gray-200 shadow-sm bg-gray-50">
+      <h2 className="ml-auto text-2xl mr-4 text-gray-700 mb-3 text-center">
+        This Month
+      </h2>
+      <ul className="items-grid mb-4">
         {summary.map((item) => {
           const icon = item.hasCompleted ? (
             <i className="fas fa-check"></i>
@@ -46,13 +43,16 @@ export default function Summary() {
             <i className="fas fa-times"></i>
           );
           return (
-            <li key={item.key}>
+            <li key={item.key} className="text-gray-600">
               {icon}
               {item.name}
             </li>
           );
         })}
       </ul>
+      <Link to="/more" className="block text-center text-primary text-sm">
+        Show More
+      </Link>
     </div>
   );
 }

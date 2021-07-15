@@ -21,9 +21,11 @@
   color: #0082a9;
 }
 
+/* summary yaani thisMonth */
+
 .items-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, auto);
   column-gap: 2rem;
 }
 .items-grid i {
@@ -41,4 +43,46 @@
 /* recents */
 .recents .recent-item:nth-child(2n) {
   background-color: rgb(243, 243, 243);
+}
+
+/* media queries for the dashboard */
+
+@media screen and (max-width: 1040px) {
+  .showcase {
+    flex-direction: column;
+  }
+  .showcase .line {
+    display: none;
+  }
+  .showcase .summary,
+  .showcase .total-container {
+    margin: 0px;
+  }
+  .showcase .total-container {
+    margin-bottom: 2rem;
+  }
+  .showcase .total {
+    margin-right: 3rem;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .summary .items-grid {
+    grid-template-columns: repeat(2, auto);
+  }
+  .summary .items-grid li:nth-child(9) {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .summary .items-grid {
+    grid-template-columns: auto;
+    justify-content: center;
+  }
+  .summary .items-grid li:nth-child(8),
+  .summary .items-grid li:nth-child(7),
+  .summary .items-grid li:nth-child(6) {
+    display: none;
+  }
 }

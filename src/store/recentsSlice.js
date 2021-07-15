@@ -50,6 +50,10 @@ export function loadMoreRecents() {
   };
 }
 
-export const loadRecents = generateAsyncThunk(recentsActions, loadFromServer);
+export const loadRecents = generateAsyncThunk(
+  "recents",
+  recentsActions,
+  loadFromServer
+);
 
 export default recentsSlice;

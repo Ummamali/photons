@@ -9,7 +9,7 @@ import "./dashboard.css";
 export default function Dashboard() {
   return (
     <div>
-      <div className="flex items-center justify-center mb-10">
+      <div className="flex items-center justify-center mb-10 showcase">
         <Total />
         <div className="line bg-gray-200"></div>
         <Summary />

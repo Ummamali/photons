@@ -30,23 +30,34 @@ export const asyncSliceInitial = { loadStatus: 0, data: {} };
 
 // asyncloaderThuns
 
-export function generateAsyncThunk(actionsObj, asyncLoader) {
-  /* Signature:
-   *actionsObject: {*startLoading, *failedLoading, *replace} action creators
+export function generateAsyncThunk(sliceName, actionsObj, asyncLoader) {
+  /* 
+  Returns a thunk which gets object from asyncLoader and dispatches a replace to that slice
+  Once slice has been loaded, the thunk will be silenced
+  Signature:
+   *actionsObject: {*startLoading, *failedLoading, *replace} action creators os that slice
    *asyncLoader: an async function which loads the data and raises exceptions on failure and returns the new state upon success!!!!
+   *sliceName: String that corresponds to the async slice name
    */
   return () => {
-    return (dispatch) => {
-      dispatch(actionsObj.startLoading());
-      asyncLoader()
-        .then((newState) => {
-          // if no error is thrown, data will be replaced! So throw the error when data is not in good <state>
-          dispatch(actionsObj.replace({ new: newState }));
-        })
-        .catch((errorObj) => {
-          console.log(errorObj);
-          dispatch(actionsObj.failedLoading());
-        });
+    return (dispatch, getState) => {
+      const loadStatus = getState()[sliceName].loadStatus;
+      if (loadStatus !== 2) {
+        // it means that the data has not been loaded from the server
+        console.log("loading " + sliceName + " from backend");
+        dispatch(actionsObj.startLoading());
+        asyncLoader()
+          .then((newState) => {
+            // if no error is thrown, data will be replaced! So throw the error when data is not in good <state>
+            dispatch(actionsObj.replace({ new: newState }));
+          })
+          .catch((errorObj) => {
+            console.log(errorObj);
+            dispatch(actionsObj.failedLoading());
+          });
+      } else {
+        console.log("loadFromServer silenced for " + sliceName);
+      }
     };
   };
 }

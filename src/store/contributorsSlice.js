@@ -43,6 +43,7 @@ async function loadFromServer() {
 }
 
 export const loadContributors = generateAsyncThunk(
+  "contributors",
   contributorsActions,
   loadFromServer
 );
