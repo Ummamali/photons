@@ -89,11 +89,14 @@ export default function AddContribution() {
             references.userName.current.focus();
             clearFields(references);
             dispatchValidator(vActions.RESETALL());
+            setTimeout(() => {
+              resetStatus();
+            }, 1500);
           }
         });
       } else {
         // console.log("form is not valid");
-        resetStatus(true);
+        resetStatus();
       }
     });
   }

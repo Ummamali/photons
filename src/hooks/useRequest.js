@@ -74,18 +74,11 @@ export default function useRequest() {
     });
   }
 
-  function resetStatus(hard = false) {
+  function resetStatus() {
     /*
-      This will just reset the status to 0 if the request has been resolved if hard is not set.
-       Resets the status without check if hard is true. Resetting (cancelling) the request will be implemented later.    
+      This will just reset the status to 0. Resetting (cancelling) the request will be implemented later.    
     */
-    if (hard) {
-      setReqData({ status: 0, reqObject: null });
-    } else {
-      if (hasResolved(reqData.status)) {
-        setReqData({ status: 0, reqObject: null });
-      }
-    }
+    setReqData({ status: 0, reqObject: null });
   }
 
   function startLoading() {
