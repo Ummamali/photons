@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { useDispatch } from "react-redux";
 
 // the form and its party
 import RefFormGroup from "../../utils/RefFormGroup";
@@ -9,6 +10,8 @@ import { routes, joinURL } from "../../../configs";
 // useRequest hook for submission of form
 import useRequest, { mapFeedback } from "../../../hooks/useRequest";
 import ReqButton from "../../utils/ReqButton";
+import { registerContributorThunk } from "../../../store/thunks";
+import { clearFields } from "../../../utilFuncs/basics";
 
 function containsAlphabets(value) {
   const alphabets = "abcdefghijklmnopqrstuvwxyz";
@@ -70,6 +73,9 @@ export default function RegisterContributor() {
   // form submission hook
   const [reqData, sendRequest, resetStatus, startLoading] = useRequest();
 
+  // dispatching the store
+  const dispatchGlobal = useDispatch();
+
   function submitHandler(e) {
     e.preventDefault();
     const validations = [];
@@ -91,9 +97,20 @@ export default function RegisterContributor() {
           method: "POST",
           route: routes.newContributor,
           body: body,
+        }).then((resObj) => {
+          if (resObj.status === 200) {
+            dispatchGlobal(registerContributorThunk(body));
+            // here we have to reset the form
+            references.userName.current.focus();
+            clearFields(references);
+            dispatchValidator(vActions.RESETALL());
+            setTimeout(() => {
+              resetStatus();
+            }, 1800);
+          }
         });
       } else {
-        resetStatus(true);
+        resetStatus();
       }
     });
   }
@@ -102,7 +119,6 @@ export default function RegisterContributor() {
     const target = event.target;
     const identity = target.dataset.identity;
     const value = target.value;
-    resetStatus();
     validateCore(identity, value);
   }
 

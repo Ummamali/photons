@@ -18,6 +18,7 @@ import { loadContributors } from "../../../store/contributorsSlice";
 import { loadThisMonth } from "../../../store/thisMonthSlice";
 import { loadRecents } from "../../../store/recentsSlice";
 import { combineLoadStatus, mapFeedback } from "../../../hooks/useRequest";
+import ErrorMessage from "../../utils/ErrorMessage";
 
 export default function Home() {
   const thisMonthLS = useSelector((state) => state.thisMonth.loadStatus);
@@ -32,9 +33,11 @@ export default function Home() {
   const historyObj = useHistory();
 
   useEffect(() => {
-    dispatch(loadContributors());
-    dispatch(loadThisMonth());
-    dispatch(loadRecents());
+    if (loadStatus !== 2) {
+      dispatch(loadContributors());
+      dispatch(loadThisMonth());
+      dispatch(loadRecents());
+    }
   }, []);
 
   const mainBody = mapFeedback(
@@ -49,22 +52,35 @@ export default function Home() {
         </div>
       ),
       2: <Dashboard />,
-      3: <p className="text-red-500 text-center italic">Unable to load Data</p>,
+      3: (
+        <ErrorMessage title="Failed To Load Data">
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Unde tenetur
+          sunt suscipit porro quos fugit libero dignissimos, earum tempora animi
+          temporibus expedita similique accusantium accusamus rem fuga optio
+          repudiandae officia alias recusandae aliquid deserunt et repellat!
+          Atque dolorum sint alias.
+          <br />
+          <br />
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iste
+          eligendi est volup exercitationem, pariatur quisquam nemo tempore,
+          quis ad autem tempora animi perspiciatis amet?
+        </ErrorMessage>
+      ),
     }
   );
 
   function closeModel() {
-    historyObj.push("/");
+    historyObj.push("/home");
   }
 
   return (
     <div className="my-10">
-      <Route exact path="/contribute">
+      <Route exact path="/home/contribute">
         <Model onClose={closeModel}>
           <AddContribution />
         </Model>
       </Route>
-      <Route path="/register">
+      <Route path="/home/register">
         <Model onClose={closeModel}>
           <RegisterContributor />
         </Model>
