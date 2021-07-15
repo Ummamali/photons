@@ -89,11 +89,14 @@ export default function AddContribution() {
             references.userName.current.focus();
             clearFields(references);
             dispatchValidator(vActions.RESETALL());
+            setTimeout(() => {
+              resetStatus();
+            }, 3000);
           }
         });
       } else {
         // console.log("form is not valid");
-        resetStatus(true);
+        resetStatus();
       }
     });
   }
@@ -103,6 +106,7 @@ export default function AddContribution() {
     const identity = target.dataset.identity;
     const value = target.value;
     validateCore(identity, value);
+    console.log("i am validating " + identity);
   }
 
   function resetValidity(e) {
