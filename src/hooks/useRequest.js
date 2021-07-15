@@ -76,7 +76,7 @@ export default function useRequest() {
 
   function resetStatus() {
     /*
-      This will just reset the status to 0    
+      This will just reset the status to 0. Resetting (cancelling) the request will be implemented later.    
     */
     setReqData({ status: 0, reqObject: null });
   }

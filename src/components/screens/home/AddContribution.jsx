@@ -91,7 +91,7 @@ export default function AddContribution() {
             dispatchValidator(vActions.RESETALL());
             setTimeout(() => {
               resetStatus();
-            }, 3000);
+            }, 1800);
           }
         });
       } else {

@@ -23,3 +23,12 @@ export function addContributionThnuk(userName, contObj, forRecents) {
     );
   };
 }
+
+export function registerContributorThunk(userObj) {
+  // userObj >>> { *id:String, *name:String}
+
+  return (dispatch) => {
+    dispatch(contributorsActions.addContributor({ userObj }));
+    dispatch(thisMonthActions.addContributor(userObj.id));
+  };
+}

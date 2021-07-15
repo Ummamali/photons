@@ -1,0 +1,12 @@
+{
+  "autorun": true,
+  "autokill": true,
+  "terminals": [
+    {
+      "name": "DevServer",
+      "icon": "debug-breakpoint",
+      "description": "Server which is running >> npm run start",
+      "command": "npm run start"
+    }
+  ]
+}
