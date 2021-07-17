@@ -101,12 +101,11 @@ export default function RegisterContributor() {
           if (resObj.status === 200) {
             dispatchGlobal(registerContributorThunk(body));
             // here we have to reset the form
-            references.userName.current.focus();
             clearFields(references);
             dispatchValidator(vActions.RESETALL());
             setTimeout(() => {
               resetStatus();
-            }, 1800);
+            }, 3000);
           }
         });
       } else {

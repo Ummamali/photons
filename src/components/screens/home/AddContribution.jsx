@@ -86,12 +86,11 @@ export default function AddContribution() {
               )
             );
             // here we have to reset the form
-            references.userName.current.focus();
             clearFields(references);
             dispatchValidator(vActions.RESETALL());
             setTimeout(() => {
               resetStatus();
-            }, 1800);
+            }, 3000);
           }
         });
       } else {
@@ -106,7 +105,6 @@ export default function AddContribution() {
     const identity = target.dataset.identity;
     const value = target.value;
     validateCore(identity, value);
-    console.log("i am validating " + identity);
   }
 
   function resetValidity(e) {
