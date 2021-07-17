@@ -1,0 +1,10 @@
+/* this is the header stylesheet */
+
+@media screen and (max-width: 770px) {
+  header nav {
+    flex-direction: column;
+  }
+  header .logo {
+    margin-bottom: 0.5rem;
+  }
+}

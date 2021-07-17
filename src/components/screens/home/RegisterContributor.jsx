@@ -140,9 +140,9 @@ export default function RegisterContributor() {
     4: 3,
   });
   return (
-    <div className="w-hard-small py-12 px-8 mx-auto rounded-lg shadow-lg bg-white">
+    <div className="w-hard-small py-12 px-8 mx-auto rounded-lg shadow-lg bg-white reg-contr">
       <div className="text-center mb-6">
-        <h1 className="text-3xl text-gray-600 mb-3">Register Contributor</h1>
+        <h2 className="text-3xl text-gray-600 mb-3">Register Contributor</h2>
         <p className="leading-none text-gray-500 text-opacity-90 text-sm">
           More contributors, more contributions
         </p>
@@ -174,7 +174,7 @@ export default function RegisterContributor() {
               hideIcons
             />
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 form-feet">
             <ReqButton reqStatus={reqData.status}>Register</ReqButton>
             {feedbackEl}
           </div>

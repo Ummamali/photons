@@ -126,7 +126,7 @@ export default function AddContribution() {
     4: 3,
   });
   return (
-    <div className="bg-white px-8 py-12 w-hard-small rounded-lg">
+    <div className="bg-white px-8 py-12 w-hard-small rounded-lg add-contr">
       <h2 className="text-center text-3xl text-gray-700 mb-4">
         Add Contribution
       </h2>
@@ -156,7 +156,7 @@ export default function AddContribution() {
             hideIcons
           />
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center form-feet">
           <ReqButton addCls="w-36 mr-4" reqStatus={reqData.status}>
             Add
           </ReqButton>
