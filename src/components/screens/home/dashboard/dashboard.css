@@ -40,11 +40,6 @@
   color: var(--color-warn);
 }
 
-/* recents */
-.recents .recent-item:nth-child(2n) {
-  background-color: rgb(243, 243, 243);
-}
-
 /* media queries for the dashboard */
 
 @media screen and (max-width: 1040px) {
@@ -66,23 +61,86 @@
   }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 770px) {
   .summary .items-grid {
     grid-template-columns: repeat(2, auto);
   }
   .summary .items-grid li:nth-child(9) {
     display: none;
   }
+
+  .recents .recent-item {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 }
 
-@media screen and (max-width: 450px) {
+@media screen and (max-width: 600px) {
+  .model-card .add-contr,
+  .model-card .reg-contr {
+    padding: 2rem 1rem;
+    border-radius: 5px;
+    width: 95vw;
+  }
+
+  .model-card .add-contr h2,
+  .model-card .reg-contr h2 {
+    font-size: 1.5rem;
+    margin-bottom: 4px;
+  }
+
+  .model-card .add-contr label,
+  .model-card .reg-contr label {
+    font-size: 14px;
+  }
+
+  .model-card .add-contr .invalid-msg,
+  .model-card .reg-contr .invalid-msg {
+    font-size: 12px;
+  }
+
+  .model-card .add-contr .req-button,
+  .model-card .reg-contr .req-button {
+    width: 98%;
+    margin-right: 0px;
+    margin-bottom: 1rem;
+    font-size: 15px;
+  }
+
+  .model-card .add-contr .form-feet,
+  .model-card .reg-contr .form-feet {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 440px) {
+  /* now its a sigle colums */
+  .summary {
+    width: 100%;
+  }
   .summary .items-grid {
     grid-template-columns: auto;
     justify-content: center;
   }
+  /* hiding the last three */
   .summary .items-grid li:nth-child(8),
   .summary .items-grid li:nth-child(7),
   .summary .items-grid li:nth-child(6) {
     display: none;
+  }
+}
+
+@media screen and (max-width: 340px) {
+  .total-container {
+    flex-direction: column;
+  }
+  .total-container .total {
+    margin-right: 0px;
+    margin-bottom: 8px;
+  }
+
+  .recents .recent-item {
+    flex-direction: column;
   }
 }

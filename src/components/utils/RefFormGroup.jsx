@@ -52,7 +52,7 @@ const RefFormGroup = forwardRef((props, ref) => {
         {icon}
       </div>
       {isInvalid && (
-        <p className="text-red-500 text-opacity-90 text-sm italic mt-1">
+        <p className="text-red-500 text-opacity-90 text-sm italic mt-1 invalid-msg">
           {props.vData.msg}
         </p>
       )}

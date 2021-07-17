@@ -35,10 +35,10 @@ export default function Recents() {
       <h2 className="text-center text-2xl text-gray-700 mb-4">
         Recent Contributions
       </h2>
-      <div className="recents mb-3 w-sec mx-auto">
+      <div className="recents mb-3 w-sec mx-auto space-y-2">
         {recentList.map((item) => (
           <div
-            className="flex items-center justify-between px-28 py-2 recent-item"
+            className="flex items-center justify-between px-28 py-2 bg-gray-50 recent-item rounded-lg"
             key={item.key}
           >
             <p className="text-gray-700">{item.name}</p>
