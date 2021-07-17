@@ -40,6 +40,10 @@
   color: var(--color-warn);
 }
 
+.items-grid {
+  white-space: nowrap;
+}
+
 /* media queries for the dashboard */
 
 @media screen and (max-width: 1040px) {
