@@ -1,0 +1,21 @@
+/* This stylesheet is specific to /contributors page which shows data about the users */
+
+/* the head */
+.users-head {
+  border-bottom: 1px solid #ededed;
+}
+
+#contributors .results {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 1rem;
+  justify-content: center;
+}
+
+/* cont cards */
+.cont-card {
+  width: 520px;
+}
+.cont-card .head {
+  border-bottom: 1px solid #ededed;
+}

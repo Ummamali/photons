@@ -3,6 +3,7 @@ import { Switch, Route, Redirect } from "react-router-dom";
 
 // The dashboard will be the main root screen
 import Home from "./screens/home/Home";
+import Contributors from "./screens/contributors/Contributors";
 import ErrorMessage from "./utils/ErrorMessage";
 
 // the navigation bar
@@ -15,13 +16,16 @@ export default function App() {
       <main className="px-8">
         <div className="w-main mx-auto">
           <Switch>
-            <Route path="/home">
-              <Home />
-            </Route>
             <Route exact path="/">
               <Redirect to="/home" />
             </Route>
-            <Route>
+            <Route path="/home">
+              <Home />
+            </Route>
+            <Route path="/contributors">
+              <Contributors />
+            </Route>
+            <Route path="*">
               <ErrorMessage title="This Route Doesn't Exists">
                 Lorem ipsum dolor sit amet consectetur, adipisicing elit.
                 Tempora quasi nulla sunt. Quod beatae id sunt ratione error,

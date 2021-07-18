@@ -50,7 +50,10 @@ export default function Summary() {
           );
         })}
       </ul>
-      <Link to="/more" className="block text-center text-primary text-sm">
+      <Link
+        to="/contributors"
+        className="block text-center text-primary text-sm"
+      >
         Show More
       </Link>
     </div>

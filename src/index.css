@@ -16,6 +16,8 @@
   --color-dark: #565656;
   --color-success: #00cb4c;
   --color-warn: #ff3939;
+  --color-user: #dbbb74;
+  --color-rupee: #66aa80;
 }
 
 /* body and internal styles */
@@ -35,8 +37,9 @@ input::placeholder {
   font-style: italic;
 }
 
-/* buttons */
-button:focus {
+/* buttons and their annoying focus outlines*/
+button:focus,
+input[type="text"]:focus {
   outline: none !important;
 }
 /* utility classes */
@@ -65,9 +68,26 @@ button:focus {
   background-color: var(--color-primary);
 }
 
+.bg-user {
+  background-color: var(--color-user);
+}
+
+.bg-rupee {
+  background-color: var(--color-rupee);
+}
+
 /* foregrounds */
 .text-dark {
   color: var(--color-dark);
+}
+.text-user {
+  color: var(--color-user);
+}
+.text-rupee {
+  color: var(--color-rupee);
+}
+.text-success {
+  color: var(--color-success);
 }
 
 .text-primary {
