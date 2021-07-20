@@ -27,17 +27,35 @@ export default function Contributors() {
             </button>
           </form>
           <div className="flex items-center space-x-4 text-sm text-gray-600">
-            <div>
-              <input type="radio" name="statuses" className="mr-1" />
-              All
+            <div className="checkbox-contain">
+              <input
+                type="radio"
+                name="statuses"
+                className="mr-1"
+                id="all-radio"
+              />
+              <div className="radio"></div>
+              <label htmlFor="all-radio">All</label>
             </div>
-            <div>
-              <input type="radio" name="statuses" className="mr-1" />
-              Remaining
+            <div className="checkbox-contain">
+              <input
+                type="radio"
+                name="statuses"
+                className="mr-1"
+                id="rem-radio"
+              />
+              <div className="radio"></div>
+              <label htmlFor="rem-radio">Remaining</label>
             </div>
-            <div>
-              <input type="radio" name="statuses" className="mr-1" />
-              Done
+            <div className="checkbox-contain">
+              <input
+                type="radio"
+                name="statuses"
+                className="mr-1"
+                id="done-radio"
+              />
+              <div className="radio"></div>
+              <label htmlFor="done-radio">Done</label>
             </div>
           </div>
         </div>

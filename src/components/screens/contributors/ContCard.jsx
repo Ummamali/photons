@@ -5,7 +5,9 @@ export default function ContCard() {
   return (
     <div className="border border-gray-300 shadow-sm px-4 py-4 rounded cont-card">
       <div className="flex items-center justify-between py-4 head">
-        <h3 className="text-xl text-gray-700">Abdul Hadi Mir</h3>
+        <h3 className="text-xl text-gray-700 text-opacity-90">
+          Abdul Hadi Mir
+        </h3>
         <div className="text-gray-400 flex items-center text-sm">
           <i className="fas fa-check-circle text-success text-xl mr-1"></i>
           Done
@@ -34,7 +36,9 @@ export default function ContCard() {
           </Link>
           <div className="text-right">
             <small className="text-gray-400">Last Contribution</small>
-            <h2 className="text-gray-600">Rs. 220 on July 19, 2021</h2>
+            <h2 className="text-gray-600 text-opacity-90">
+              Rs. 220 on July 19, 2021
+            </h2>
           </div>
         </div>
       </div>
