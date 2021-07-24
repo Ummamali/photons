@@ -11,7 +11,7 @@ export default function Dashboard() {
     <div>
       <div className="flex items-center justify-center mb-10 showcase">
         <Total />
-        <div className="line bg-gray-200"></div>
+        <div className="line bg-gray-200 bg-opacity-70"></div>
         <Summary />
       </div>
       <Recents />

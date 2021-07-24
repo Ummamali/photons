@@ -31,7 +31,7 @@ export default function Summary() {
   }, [loadStatus, thisMonth.data]);
 
   return (
-    <div className="ml-28 summary rounded px-8 py-4 border border-gray-200 shadow-sm bg-gray-50">
+    <div className="ml-16 summary rounded px-8 py-4 border border-gray-200 shadow-sm bg-gray-50">
       <h2 className="ml-auto text-2xl mr-4 text-gray-700 mb-3 text-center">
         This Month
       </h2>
