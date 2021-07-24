@@ -62,7 +62,6 @@ export default function Contributors() {
       </div>
       <div className="results mt-8">
         <ContCard />
-        <ContCard />
       </div>
     </div>
   );
