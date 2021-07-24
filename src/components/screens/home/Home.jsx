@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, useHistory } from "react-router-dom";
 
-import Loader from "../../utils/Loader";
+import LoadedScreen from "../../utils/LoadedScreen";
 
 // dashboard
 import Dashboard from "./dashboard/Dashboard";
@@ -17,8 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadContributors } from "../../../store/contributorsSlice";
 import { loadThisMonth } from "../../../store/thisMonthSlice";
 import { loadRecents } from "../../../store/recentsSlice";
-import { combineLoadStatus, mapFeedback } from "../../../hooks/useRequest";
-import ErrorMessage from "../../utils/ErrorMessage";
+import { combineLoadStatus } from "../../../hooks/useRequest";
 
 export default function Home() {
   const thisMonthLS = useSelector((state) => state.thisMonth.loadStatus);
@@ -38,35 +37,6 @@ export default function Home() {
     dispatch(loadRecents());
   }, []);
 
-  const mainBody = mapFeedback(
-    { status: loadStatus },
-    {
-      1: (
-        <div className="mt-20">
-          <Loader w={100} addCls="mx-auto" />
-          <p className="text-center text-gray-500 italic text-sm">
-            Loading, Please Wait....
-          </p>
-        </div>
-      ),
-      2: <Dashboard />,
-      3: (
-        <ErrorMessage title="Failed To Load Data">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Unde tenetur
-          sunt suscipit porro quos fugit libero dignissimos, earum tempora animi
-          temporibus expedita similique accusantium accusamus rem fuga optio
-          repudiandae officia alias recusandae aliquid deserunt et repellat!
-          Atque dolorum sint alias.
-          <br />
-          <br />
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iste
-          eligendi est volup exercitationem, pariatur quisquam nemo tempore,
-          quis ad autem tempora animi perspiciatis amet?
-        </ErrorMessage>
-      ),
-    }
-  );
-
   function closeModel() {
     historyObj.push("/home");
   }
@@ -83,7 +53,9 @@ export default function Home() {
           <RegisterContributor />
         </Model>
       </Route>
-      {mainBody}
+      <LoadedScreen loadStatus={loadStatus}>
+        <Dashboard />
+      </LoadedScreen>
     </div>
   );
 }

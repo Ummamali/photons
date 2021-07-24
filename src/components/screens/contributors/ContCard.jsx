@@ -1,24 +1,46 @@
-import React from "react";
+import React, { memo } from "react";
 import { Link } from "react-router-dom";
 
-export default function ContCard(props) {
+const ContCard = memo(({ userObj, thisMonth }) => {
   /*
     props >>> {
-      name: String, ( user full name )
-      id: String, ( username)
-      thisMonthCont: int,  ( how much amount have been given in the current month)
-      total: int, ( total amount that has been given )
-      contCount: int,  ( number of contributions )
-      lastCont: Object ( timestamp of last contribution and the amount )
-      }
+      userObj: { the object from the store},
+      thisMonth: int 
+    }
   */
+  const contList = userObj.contributions;
+  const contLength = contList.length;
+  const lastCont = contList[contLength - 1];
+  const lastContText =
+    lastCont === undefined
+      ? "No Contributions yet!"
+      : `Rs. ${lastCont.amount} on ${new Date(
+          lastCont.stamp
+        ).toLocaleDateString("en-GB")}`;
+  let thisMonthEl =
+    thisMonth >= 200 ? (
+      <>
+        <i className="fas fa-check-circle text-success text-xl mr-1"></i>Done
+      </>
+    ) : (
+      <>
+        <i className="fas fa-exclamation-circle text-red-500 text-xl mr-1"></i>
+        Done
+      </>
+    );
+  const total = contList.reduce(
+    (accumulated, curr) => accumulated + curr.amount,
+    0
+  );
+
   return (
     <div className="border border-gray-300 shadow-sm px-4 py-4 rounded cont-card">
       <div className="flex items-center justify-between py-4 head">
-        <h3 className="text-xl text-gray-700 text-opacity-90">{props.name}</h3>
+        <h3 className="text-xl text-gray-700 text-opacity-90">
+          {userObj.name}
+        </h3>
         <div className="text-gray-400 flex items-center text-sm">
-          <i className="fas fa-check-circle text-success text-xl mr-1"></i>
-          {props.thisMonthCont >= 200}
+          {thisMonthEl}
         </div>
       </div>
       <div>
@@ -26,15 +48,13 @@ export default function ContCard(props) {
           <div>
             <h2 className="text-lg leading-none text-gray-600">
               <i className="fas fa-money-bill text-rupee mr-2"></i>
-              Contributed {props.total}/-
+              Contributed {total}/-
             </h2>
-            <small className="text-gray-500">
-              {props.contCount} contributions
-            </small>
+            <small className="text-gray-500">{contLength} contributions</small>
           </div>
           <h2 className="text-gray-600">
             <i className="fas fa-user mr-1 text-user"></i>
-            {props.id}
+            {userObj.id}
           </h2>
         </div>
         <div className="flex items-end justify-between">
@@ -46,13 +66,12 @@ export default function ContCard(props) {
           </Link>
           <div className="text-right">
             <small className="text-gray-400">Last Contribution</small>
-            <h2 className="text-gray-600 text-opacity-90">
-              Rs. {props.lastCont.amount} on{" "}
-              {new Date(props.lastCont.stamp).toLocaleDateString("en-GB")}
-            </h2>
+            <h2 className="text-gray-600 text-opacity-90">{lastContText}</h2>
           </div>
         </div>
       </div>
     </div>
   );
-}
+});
+
+export default ContCard;
