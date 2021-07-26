@@ -9,6 +9,12 @@ import "./contributors.css";
 
 export default function Contributors() {
   const [results, setResults] = useState([]);
+  // category can be ALL, DONE OR REMAINING
+  const [category, setCategory] = useState("ALL");
+  // the state which keeps track of search string
+  const [searchQ, setSearchQ] = useState("");
+
+  // from the store
   const thisMonth = useSelector((state) => state.thisMonth);
   const contributors = useSelector((state) => state.contributors);
   const loadStatus = combineLoadStatus([
@@ -21,22 +27,47 @@ export default function Contributors() {
   useEffect(() => {
     dispatch(loadContributors());
     dispatch(loadThisMonth());
-  }, []);
+  }, [dispatch]);
 
   // when the data has been loaded
   useEffect(() => {
     if (loadStatus === 2) {
-      const newResults = [];
-      for (const [userId, userObj] of Object.entries(contributors.data)) {
-        const forContCard = {
-          userObj: userObj,
-          thisMonth: thisMonth.data[userId],
-        };
-        newResults.push(forContCard);
-      }
-      setResults(newResults);
+      updateResults();
     }
   }, [loadStatus]);
+
+  // whenever category or search query chanages, resulta will be updated
+  useEffect(() => {
+    updateResults();
+  }, [category, searchQ]);
+
+  function updateResults() {
+    const newResults = [];
+    for (const [userId, userObj] of Object.entries(contributors.data)) {
+      const forContCard = {
+        userObj: userObj,
+        thisMonth: thisMonth.data[userId],
+      };
+      if (
+        (forContCard.thisMonth >= 200 && category === "DONE") ||
+        (forContCard.thisMonth < 200 && category === "REMAINING") ||
+        category === "ALL"
+      ) {
+        if (
+          userObj.name.toLowerCase().includes(searchQ.toLowerCase()) ||
+          userObj.id.toLowerCase().includes(searchQ.toLowerCase()) ||
+          searchQ === ""
+        ) {
+          newResults.push(forContCard);
+        }
+      }
+    }
+    setResults(newResults);
+  }
+
+  function radioChangeHandler(e) {
+    setCategory(e.target.dataset.category);
+  }
 
   return (
     <LoadedScreen loadStatus={loadStatus}>
@@ -52,23 +83,25 @@ export default function Contributors() {
             </small>
           </div>
           <div>
-            <form className="bg-gray-200 bg-opacity-80 py-1 pl-3 pr-2 rounded-sm mb-3 w-80 flex">
+            <div className="bg-gray-200 bg-opacity-80 py-1 px-3 rounded-sm mb-3 w-80 flex items-center">
+              <i className="fas fa-search block mr-2 -mb-0.5 text-gray-400"></i>
               <input
                 type="text"
-                className="bg-transparent block w-full text-gray-600"
+                className="bg-transparent block w-full text-gray-500"
                 placeholder="search contributor..."
+                value={searchQ}
+                onChange={(e) => setSearchQ(e.target.value)}
               />
-              <button type="submit" className="text-gray-700">
-                <i className="fas fa-search"></i>
-              </button>
-            </form>
+            </div>
             <div className="flex items-center space-x-4 text-sm text-gray-600">
               <div className="checkbox-contain">
                 <input
                   type="radio"
-                  name="statuses"
-                  className="mr-1"
+                  name="category"
                   id="all-radio"
+                  data-category="ALL"
+                  onChange={radioChangeHandler}
+                  checked={category === "ALL"}
                 />
                 <div className="radio"></div>
                 <label htmlFor="all-radio">All</label>
@@ -76,9 +109,11 @@ export default function Contributors() {
               <div className="checkbox-contain">
                 <input
                   type="radio"
-                  name="statuses"
-                  className="mr-1"
+                  name="category"
                   id="rem-radio"
+                  data-category="REMAINING"
+                  onChange={radioChangeHandler}
+                  checked={category === "REMAINING"}
                 />
                 <div className="radio"></div>
                 <label htmlFor="rem-radio">Remaining</label>
@@ -86,9 +121,11 @@ export default function Contributors() {
               <div className="checkbox-contain">
                 <input
                   type="radio"
-                  name="statuses"
-                  className="mr-1"
+                  name="category"
                   id="done-radio"
+                  data-category="DONE"
+                  onChange={radioChangeHandler}
+                  checked={category === "DONE"}
                 />
                 <div className="radio"></div>
                 <label htmlFor="done-radio">Done</label>
@@ -101,6 +138,12 @@ export default function Contributors() {
             <ContCard {...contCardProps} key={contCardProps.userObj.id} />
           ))}
         </div>
+        {results.length === 0 && (
+          <p className="text-center text-gray-500">
+            No contributor found
+            <i className="far fa-frown ml-2 text-red-600"></i>
+          </p>
+        )}
       </div>
     </LoadedScreen>
   );

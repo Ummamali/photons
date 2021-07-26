@@ -25,7 +25,7 @@ const ContCard = memo(({ userObj, thisMonth }) => {
     ) : (
       <>
         <i className="fas fa-exclamation-circle text-red-500 text-xl mr-1"></i>
-        Done
+        Not Yet
       </>
     );
   const total = contList.reduce(
@@ -34,7 +34,7 @@ const ContCard = memo(({ userObj, thisMonth }) => {
   );
 
   return (
-    <div className="border border-gray-300 shadow-sm px-4 py-4 rounded cont-card">
+    <div className="bg-gray-50 bg-opacity-50 border border-gray-200 px-4 py-4 rounded cont-card">
       <div className="flex items-center justify-between py-4 head">
         <h3 className="text-xl text-gray-700 text-opacity-90">
           {userObj.name}
@@ -48,7 +48,7 @@ const ContCard = memo(({ userObj, thisMonth }) => {
           <div>
             <h2 className="text-lg leading-none text-gray-600">
               <i className="fas fa-money-bill text-rupee mr-2"></i>
-              Contributed {total}/-
+              Contributed {total.toLocaleString("en-US")}/-
             </h2>
             <small className="text-gray-500">{contLength} contributions</small>
           </div>
