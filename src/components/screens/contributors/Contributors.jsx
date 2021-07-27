@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Route, useHistory } from "react-router-dom";
 import { loadContributors } from "../../../store/contributorsSlice";
 import { loadThisMonth } from "../../../store/thisMonthSlice";
 import { combineLoadStatus } from "../../../hooks/useRequest";
 import LoadedScreen from "../../utils/LoadedScreen";
 import ContCard from "./ContCard";
 import "./contributors.css";
+import ContRecents from "./ContRecents";
 
 export default function Contributors() {
   const [results, setResults] = useState([]);
@@ -71,9 +73,12 @@ export default function Contributors() {
 
   return (
     <LoadedScreen loadStatus={loadStatus}>
+      <Route path="/contributors/:userId">
+        <ContRecents />
+      </Route>
       <div id="contributors" className="mb-8">
         <div className="users-head flex items-center justify-between py-8">
-          <div>
+          <div className="title">
             <h1 className="text-3xl text-gray-700">
               <i className="fas fa-users text-user"></i> Registered Contributors
             </h1>
@@ -87,13 +92,13 @@ export default function Contributors() {
               <i className="fas fa-search block mr-2 -mb-0.5 text-gray-400"></i>
               <input
                 type="text"
-                className="bg-transparent block w-full text-gray-500"
+                className="bg-transparent block w-full text-gray-500 search"
                 placeholder="search contributor..."
                 value={searchQ}
                 onChange={(e) => setSearchQ(e.target.value)}
               />
             </div>
-            <div className="flex items-center space-x-4 text-sm text-gray-600">
+            <div className="flex items-center space-x-4 text-sm text-gray-600 categories">
               <div className="checkbox-contain">
                 <input
                   type="radio"
@@ -140,7 +145,7 @@ export default function Contributors() {
         </div>
         {results.length === 0 && (
           <p className="text-center text-gray-500">
-            No contributor found
+            No contributor to show
             <i className="far fa-frown ml-2 text-red-600"></i>
           </p>
         )}

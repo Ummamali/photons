@@ -18,6 +18,10 @@
   --color-warn: #ff3939;
   --color-user: #dbbb74;
   --color-rupee: #66aa80;
+
+  /* custom configurations */
+  --recent-card-height: 70vh;
+  --recent-card-head-height: 10vh;
 }
 
 /* body and internal styles */
@@ -116,7 +120,7 @@ input[type="number"] {
 
 @media screen and (max-width: 440px) {
   #root > main {
-    padding-left: 0px;
-    padding-right: 0px;
+    padding-left: 8px;
+    padding-right: 8px;
   }
 }

@@ -54,7 +54,7 @@ export default function Summary() {
         to="/contributors"
         className="block text-center text-primary text-sm"
       >
-        Show More
+        <i className="fas fa-users"></i> Show All
       </Link>
     </div>
   );

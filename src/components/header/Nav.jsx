@@ -10,8 +10,8 @@ export default function Nav() {
           <Link to="/home">PHOTONS</Link>
         </div>
         <ul className="flex items-center font-light space-x-8 text-white text-opacity-80">
-          <NavLink exact to="/home">
-            Dashboard
+          <NavLink exact to="/contributors">
+            Contributors
           </NavLink>
           <NavLink exact to="/home/contribute">
             Contribute
