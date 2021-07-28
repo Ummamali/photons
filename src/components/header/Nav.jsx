@@ -13,6 +13,9 @@ export default function Nav() {
           <NavLink exact to="/contributors">
             Contributors
           </NavLink>
+          <NavLink exact to="/collect">
+            Collect
+          </NavLink>
           <NavLink exact to="/home/contribute">
             Contribute
           </NavLink>

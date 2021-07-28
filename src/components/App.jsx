@@ -8,6 +8,7 @@ import ErrorMessage from "./utils/ErrorMessage";
 
 // the navigation bar
 import Nav from "./header/Nav";
+import CollectScreen from "./screens/collect/CollectScreen";
 
 export default function App() {
   return (
@@ -24,6 +25,9 @@ export default function App() {
             </Route>
             <Route path="/contributors">
               <Contributors />
+            </Route>
+            <Route path="/collect">
+              <CollectScreen />
             </Route>
             <Route path="*">
               <ErrorMessage title="This Route Doesn't Exists">

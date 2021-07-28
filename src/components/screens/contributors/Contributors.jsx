@@ -8,6 +8,19 @@ import LoadedScreen from "../../utils/LoadedScreen";
 import ContCard from "./ContCard";
 import "./contributors.css";
 import ContRecents from "./ContRecents";
+import RadioButtons from "../../utils/RadioButtons";
+
+// the radio buttons which keep track which category to show
+const radioIdToCategory = {
+  "radio-all": "ALL",
+  "radio-done": "DONE",
+  "radio-remaining": "REMAINING",
+};
+const radioIdToLabels = {
+  "radio-all": "All",
+  "radio-done": "Done",
+  "radio-remaining": "Remaining",
+};
 
 export default function Contributors() {
   const [results, setResults] = useState([]);
@@ -98,44 +111,14 @@ export default function Contributors() {
                 onChange={(e) => setSearchQ(e.target.value)}
               />
             </div>
-            <div className="flex items-center space-x-4 text-sm text-gray-600 categories">
-              <div className="checkbox-contain">
-                <input
-                  type="radio"
-                  name="category"
-                  id="all-radio"
-                  data-category="ALL"
-                  onChange={radioChangeHandler}
-                  checked={category === "ALL"}
-                />
-                <div className="radio"></div>
-                <label htmlFor="all-radio">All</label>
-              </div>
-              <div className="checkbox-contain">
-                <input
-                  type="radio"
-                  name="category"
-                  id="rem-radio"
-                  data-category="REMAINING"
-                  onChange={radioChangeHandler}
-                  checked={category === "REMAINING"}
-                />
-                <div className="radio"></div>
-                <label htmlFor="rem-radio">Remaining</label>
-              </div>
-              <div className="checkbox-contain">
-                <input
-                  type="radio"
-                  name="category"
-                  id="done-radio"
-                  data-category="DONE"
-                  onChange={radioChangeHandler}
-                  checked={category === "DONE"}
-                />
-                <div className="radio"></div>
-                <label htmlFor="done-radio">Done</label>
-              </div>
-            </div>
+            <RadioButtons
+              idToCategory={radioIdToCategory}
+              idToLabels={radioIdToLabels}
+              currentCategory={category}
+              onChange={radioChangeHandler}
+              className="flex items-center space-x-4 text-sm text-gray-600 categories"
+              name="categories"
+            />
           </div>
         </div>
         <div className="results mt-8">

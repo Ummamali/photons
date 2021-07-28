@@ -1,0 +1,24 @@
+/* this stylesheet is specific to collect screen */
+
+#collect h1 {
+  font-size: 2rem;
+}
+
+.collect-head h2 {
+  font-size: 1.5rem;
+  color: #1d718b;
+}
+.collect-head p {
+  font-size: 0.9rem;
+}
+
+.collect-head {
+  border-bottom: 1px solid #dfdfdf;
+}
+
+/* RADIO BUTTONS */
+
+.mode-radio .radio-contain {
+  display: flex;
+  align-items: center;
+}
