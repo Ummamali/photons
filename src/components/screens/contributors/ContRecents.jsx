@@ -8,7 +8,35 @@ export default function ContRecents() {
   const { userId } = useParams("userId");
   const contributors = useSelector((state) => state.contributors);
   const userObj = contributors.data[userId];
+  const userConts = userObj.contributions;
 
+  let recentItems = [];
+
+  if (userConts.length > 0) {
+    for (let i = userConts.length - 1; i >= 0; i--) {
+      const cont = userConts[i];
+      const stampDate = new Date(cont.stamp);
+      recentItems.push(
+        <li className="flex items-center py-1">
+          <i className="fas fa-money-bill text-sm -mb-0.5 text-rupee mr-1"></i>
+          <p className="text-gray-700">{cont.amount}/-</p>
+          <small className="text-gray-600 ml-auto">
+            {stampDate.toLocaleDateString("en-GB") +
+              ", " +
+              stampDate.toLocaleTimeString("en-US")}
+          </small>
+        </li>
+      );
+    }
+  } else {
+    recentItems = (
+      <p className="text-center text-gray-500">
+        No contributions yet
+        <i className="far fa-frown ml-2 text-red-600"></i>
+      </p>
+    );
+  }
+  // to close the main model
   function closeIt() {
     historyObj.push("/contributors");
   }
@@ -36,24 +64,7 @@ export default function ContRecents() {
         <h3 className="text-center text-gray-700 mb-3 text-xl">
           Recent Contributons
         </h3>
-        <ul className="px-5">
-          {userObj.contributions.length > 0 ? (
-            userObj.contributions.map((cont) => (
-              <li className="flex items-center py-1">
-                <i className="fas fa-money-bill text-sm -mb-0.5 text-rupee mr-1"></i>
-                <p className="text-gray-700">{cont.amount}/-</p>
-                <small className="text-gray-600 ml-auto">
-                  {new Date(cont.stamp).toLocaleString("en-US")}
-                </small>
-              </li>
-            ))
-          ) : (
-            <p className="text-center text-gray-500">
-              No contributions yet
-              <i className="far fa-frown ml-2 text-red-600"></i>
-            </p>
-          )}
-        </ul>
+        <ul className="px-5">{recentItems}</ul>
       </div>
     </Model>
   ) : (

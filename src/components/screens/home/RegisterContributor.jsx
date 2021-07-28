@@ -31,14 +31,14 @@ const defaultErrors = {
 
 const validators = {
   userFullName: (value) => {
-    const isValid = containsAlphabets(value);
+    const isValid = containsAlphabets(value) && value.length <= 18;
     const msg = isValid
       ? null
-      : "User Full Name must contain atleast one alphabet";
+      : "User Full Name must contain 1 to 18 alphabets";
     return { isValid, msg };
   },
   userName: async (value) => {
-    if (containsAlphabets(value)) {
+    if (containsAlphabets(value) && value.length <= 12) {
       const reponse = await fetch(
         `${joinURL(routes.checkUser)}?userName=${value}`
       );
@@ -49,7 +49,7 @@ const validators = {
     } else {
       return {
         isValid: false,
-        msg: "User Id must contain atleast one alphabet",
+        msg: "User Id must be of length between 1 to 12",
       };
     }
   },
