@@ -16,9 +16,37 @@
   border-bottom: 1px solid #dfdfdf;
 }
 
-/* RADIO BUTTONS */
+/* RADIO BUTTONS stylings---- we have two radio buttons */
 
 .mode-radio .radio-contain {
   display: flex;
   align-items: center;
+  position: relative;
+}
+.mode-radio input[type="radio"] {
+  position: absolute;
+  z-index: 10;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+.mode-radio .radio-contain label {
+  font-size: 0.94rem;
+}
+.mode-radio #mode-radio-view:checked ~ label {
+  color: var(--color-primary);
+}
+.mode-radio #mode-radio-edit:checked ~ label {
+  color: #c89509;
+}
+
+/* the results grid and its stylings */
+.collect-main .results.VIEW {
+  display: grid;
+  grid-template-columns: repeat(8, auto);
+}
+
+.collect-main .results .cCard {
+  max-width: 200px;
 }

@@ -1,27 +1,16 @@
 import React from "react";
+import { useState } from "react";
 import RadioButtons from "../../utils/RadioButtons";
+import { modeRadioData, collectRadioData } from "./radioButtonData";
 import "./collect.css";
-
-// we have two radio buttons
-// the mode which is
-const modeRadioIdToCategory = {
-  "mode-radio-view": "VIEW",
-  "mode-radio-edit": "EDIT",
-};
-const modeRadioIdToLabels = {
-  "mode-radio-view": (
-    <>
-      <i className="fas fa-eye"></i> View
-    </>
-  ),
-  "mode-radio-edit": (
-    <>
-      <i className="fas fa-edit"></i> Edit
-    </>
-  ),
-};
+import CollcetionCard from "./CollectionCard";
 
 export default function CollectScreen() {
+  // radio button state
+  // for mode radio button
+  const [currModeRadio, setCurrModeRadio] = useState("VIEW");
+  // for collectionStatus radio button
+  const [currCollectRadio, setCurrCollectRadio] = useState("SUCCESS");
   return (
     <div id="collect">
       <div className="collect-head flex justify-between py-6">
@@ -40,15 +29,33 @@ export default function CollectScreen() {
         </div>
       </div>
       <div className="collect-main">
-        <div className="flex justify-between">
-          <h2>Temporary Contributors</h2>
-          <div>
+        <div className="flex justify-between py-4">
+          <h2 className="text-3xl text-gray-700">Temporary Contributors</h2>
+          <div className="flex items-center">
             <RadioButtons
-              idToCategory={modeRadioIdToCategory}
-              idToLabels={modeRadioIdToLabels}
-              className="flex items-center mode-radio"
+              idToCategory={modeRadioData.idToCategory}
+              idToLabels={modeRadioData.idToLabels}
+              className="flex items-center justify-center space-x-3 mode-radio mr-12"
+              name="mode-radio"
+              currentCategory={currModeRadio}
+              onChange={(e) => setCurrModeRadio(e.target.dataset.category)}
+            />
+            <RadioButtons
+              idToCategory={collectRadioData.idToCategory}
+              idToLabels={collectRadioData.idToLabels}
+              className="default-radios flex items-center justify-center space-x-3 text-sm text-gray-700"
+              name="collect-radio"
+              currentCategory={currCollectRadio}
+              onChange={(e) => setCurrCollectRadio(e.target.dataset.category)}
             />
           </div>
+        </div>
+        <div className={"results " + currModeRadio}>
+          {/* this is the results grid */}
+          <CollcetionCard
+            mode={currModeRadio}
+            payerObj={{ name: "test Name", amount: Date.now(), hasPaid: false }}
+          />
         </div>
       </div>
     </div>

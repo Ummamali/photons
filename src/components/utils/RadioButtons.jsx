@@ -19,6 +19,7 @@ export default function RadioButtons({
         --name: the name that will be common to all radio so that only one can be selected
 
 
+        NOTE: The utils.css contains default-radios class for easy styling
         To change stylings, you have :
             --'.radio-contain' which is the overall container/parent of the radio-button
             --'input[type='radio']' are the main radio buttons

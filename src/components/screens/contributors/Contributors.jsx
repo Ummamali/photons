@@ -116,7 +116,7 @@ export default function Contributors() {
               idToLabels={radioIdToLabels}
               currentCategory={category}
               onChange={radioChangeHandler}
-              className="flex items-center space-x-4 text-sm text-gray-600 categories"
+              className="default-radios flex items-center space-x-4 text-sm text-gray-600"
               name="categories"
             />
           </div>
