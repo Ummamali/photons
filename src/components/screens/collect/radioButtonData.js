@@ -25,10 +25,12 @@ export const modeRadioData = {
 
 export const collectRadioData = {
   idToCategory: {
+    "cradio-all": "ALL",
     "cradio-success": "SUCCESS",
     "cradio-pending": "PENDING",
   },
   idToLabels: {
+    "cradio-all": "All",
     "cradio-success": "Successful",
     "cradio-pending": "Pending",
   },

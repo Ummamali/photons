@@ -42,11 +42,8 @@
 }
 
 /* the results grid and its stylings */
-.collect-main .results.VIEW {
+.collect-main .results {
   display: grid;
-  grid-template-columns: repeat(8, auto);
-}
-
-.collect-main .results .cCard {
-  max-width: 200px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
 }

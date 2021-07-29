@@ -4,12 +4,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import contributorsSlice from "./contributorsSlice";
 import thisMonthSlice from "./thisMonthSlice";
 import recentsSlice from "./recentsSlice";
+import donorSlice from "./donorSlice";
 
 const mainStore = configureStore({
   reducer: {
     contributors: contributorsSlice.reducer,
     thisMonth: thisMonthSlice.reducer,
     recents: recentsSlice.reducer,
+    donors: donorSlice.reducer,
   },
 });
 

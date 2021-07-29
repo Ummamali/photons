@@ -2,7 +2,7 @@
 
 /*
   AsyncSlices are slices which depend upon data from the backend
-  Signature >>> {*loadStatus: 0|1|2|3, data: Object (or other)}
+  Signature >>> {*loadStatus: 0|1|2|3, *data: Object (or other)}
   Use Thunks to load Data. Once the data has been loaded, subsequent mutations will be done directly without contacting the server. Therefore, it is important that state is updated after the GOOD response from the backend!
 
   Following are the methods for These type of slices      
@@ -34,10 +34,13 @@ export function generateAsyncThunk(sliceName, actionsObj, asyncLoader) {
   /* 
   Returns a thunk which gets object from asyncLoader and dispatches a replace to that slice
   Once slice has been loaded, the thunk will be silenced
+
   Signature:
    *actionsObject: {*startLoading, *failedLoading, *replace} action creators os that slice
-   *asyncLoader: an async function which loads the data and raises exceptions on failure and returns the new state upon success!!!!
+   *asyncLoader: an async function which loads the data and raises exceptions on failure and returns the new state upon success (its loadFromServer)!!!!
    *sliceName: String that corresponds to the async slice name
+
+   NOTE: make sure that asyncLoader returns an object on success because the replace core reducer will iterate through the new Object to populate the existing empty object
    */
   return () => {
     return (dispatch, getState) => {
