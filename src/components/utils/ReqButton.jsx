@@ -8,7 +8,7 @@ export default function ReqButton(props) {
     props : {
       *reqStatus: int,
       *type: String (submit | others),
-      addCls: String,
+      className: String,
       attributes: Object (direct additional attributes for button)
       }
 
@@ -16,7 +16,7 @@ export default function ReqButton(props) {
       >>> If reqStatus === 1 : the button will be disabled and show loading... text 
       >>> Otherwise, it will show the body
   */
-  let addCls = props.addCls ? props.addCls : "";
+  let addCls = props.className ? props.className : "";
   let innerBody = props.children;
   if (props.reqStatus === 1) {
     addCls += " loading";

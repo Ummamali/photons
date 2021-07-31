@@ -15,6 +15,7 @@ const routes = {
   newContribution: "/new/contribution",
   newContributor: "/new/contributor",
   donorsGetter: "/donors",
+  checkDonor: "/check/donor",
 };
 server.routes = routes;
 

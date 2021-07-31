@@ -1,15 +1,17 @@
 import React from "react";
 import { useState } from "react";
-import { Route } from "react-router-dom";
+import { Route, useHistory } from "react-router-dom";
 import "./collect.css";
 import { modeRadioData, collectRadioData } from "./radioButtonData";
 import RadioButtons from "../../utils/RadioButtons";
 import CollectionCard from "./CollectionCard";
-import CollectionEdit from "./CollectionEdit";
+import DonorEditModel from "./DonorEditModel";
 import { useDispatch, useSelector } from "react-redux";
 import LoadedScreen from "../../utils/LoadedScreen";
 import { useEffect } from "react";
 import { loadDonors } from "../../../store/donorSlice";
+import AddMoreBtn from "./AddMoreBtn";
+import AddDonorModel from "./AddDonorModel";
 
 export default function CollectScreen() {
   // the results state which is the core functionality
@@ -23,6 +25,9 @@ export default function CollectScreen() {
   // the donors slice works with this screen
   const donors = useSelector((state) => state.donors);
   const dispatch = useDispatch();
+
+  // using the history obj to close models
+  const historyObj = useHistory();
 
   // requesting the server upon mount
   useEffect(() => {
@@ -55,11 +60,19 @@ export default function CollectScreen() {
     }
     setResults(newResults);
   }
+
+  // for closeing the model if opened
+  function closeModel() {
+    historyObj.push("/collect");
+  }
   return (
     <LoadedScreen loadStatus={donors.loadStatus}>
       <div id="collect">
         <Route path="/collect/edit">
-          <CollectionEdit />
+          <DonorEditModel />
+        </Route>
+        <Route path="/collect/add">
+          <AddDonorModel />
         </Route>
         <div className="collect-head flex justify-between py-6">
           <div>
@@ -114,6 +127,7 @@ export default function CollectScreen() {
               <i className="far fa-frown ml-2 text-red-600"></i>
             </p>
           )}
+          {<AddMoreBtn />}
         </div>
       </div>
     </LoadedScreen>

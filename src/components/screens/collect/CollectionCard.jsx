@@ -20,7 +20,7 @@ const CollectionCard = React.memo(({ donorObj, mode }) => {
   }
 
   return (
-    <div className="border border-gray-300 p-3 rounded-sm cCard flex items-center justify-between shadow-sm">
+    <div className="border border-gray-300 p-3 rounded-sm flex items-center justify-between shadow-sm">
       <div>
         <p className="text-lg text-gray-800">{truncate(donorObj.name, 20)}</p>
         <p className="text-gray-700">{amountEl}</p>

@@ -2,7 +2,7 @@ import React from "react";
 import Model from "../../utils/Model";
 import { Redirect, useLocation } from "react-router-dom";
 
-export default function CollectionEdit() {
+export default function DonorEditModel() {
   const locationObj = useLocation();
   const searchParams = new URLSearchParams(locationObj.search);
   const name = searchParams.get("name");

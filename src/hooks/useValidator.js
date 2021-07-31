@@ -38,10 +38,15 @@ export default function useValidator(
   validatorPredicates,
   asyncList = []
 ) {
-  // identity list: object ---> {[identity]: [error-message]}
-  // validatorPredicates: object ----> {[identity]: predicateFunc}
-  // asyncList: [identity (String)] array for async functions
-  // the validator will check if the predicate lies in async array to use then and catch accordingly. Make sure to make that function async
+  /* 
+  Inputs:
+  >>>>> identity list: object ---> {[identity]: [error-message]}
+  >>>>> validatorPredicates: object ----> {[identity]: predicateFunc}
+      Note: the predicateFunc should return an object {*isValid: boolean, msg: String | null}
+      Though it is not necessary to return a msg, if msg has a falsy value default error msg provided from identityList will be used
+  >>>>> asyncList: [identity (String)] array for identities that are validated asynchronously
+   the validator will check if the predicate lies in async array to use then and catch accordingly. Make sure to make that function async
+   */
 
   // Initial value will be calculated only for the first time
   const initialValue = useMemo(() => {
@@ -63,7 +68,8 @@ export default function useValidator(
     The validate function returns a value if the validator is synchronous
     and will return a promise if the vaidator is asynchronous 
 
-    Note: the vFunc will return an object {*isValid: boolean, msg: String | null}
+    Dont worry if you are just interested in validation, validation will be done automatically
+
     */
     const vFunc = validatorPredicates[identity];
     if (asyncList.includes(identity)) {
@@ -75,10 +81,9 @@ export default function useValidator(
         vFunc(value)
           .then((validityResponse) => {
             const isValid = validityResponse.isValid;
-            const newMessage =
-              validityResponse.msg !== null
-                ? validityResponse.msg
-                : identityList[identity];
+            const newMessage = validityResponse.msg
+              ? validityResponse.msg
+              : identityList[identity];
             const newStatus = isValid ? 2 : 3;
             dispatchValidity(
               vActions.SET({
@@ -103,10 +108,9 @@ export default function useValidator(
       // synchronous validation
       const validityResponse = vFunc(value);
       const isValid = validityResponse.isValid;
-      const newMessage =
-        validityResponse.msg !== null
-          ? validityResponse.msg
-          : identityList[identity];
+      const newMessage = validityResponse.msg
+        ? validityResponse.msg
+        : identityList[identity];
       const newStatus = isValid ? 2 : 3;
       dispatchValidity(
         vActions.SET({
