@@ -46,6 +46,11 @@ button:focus,
 input[type="text"]:focus {
   outline: none !important;
 }
+
+/* buttons to get smaal on active */
+button:active {
+  transform: scale(0.98);
+}
 /* utility classes */
 
 /* logo */

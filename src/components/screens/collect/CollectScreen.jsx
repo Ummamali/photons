@@ -68,10 +68,10 @@ export default function CollectScreen() {
   return (
     <LoadedScreen loadStatus={donors.loadStatus}>
       <div id="collect">
-        <Route path="/collect/edit">
+        <Route exact path="/collect/edit">
           <DonorEditModel />
         </Route>
-        <Route path="/collect/add">
+        <Route exact path="/collect/add">
           <AddDonorModel />
         </Route>
         <div className="collect-head flex justify-between py-6">

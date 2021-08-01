@@ -14,6 +14,7 @@ export default function RadioButtons({
         --idToCategory: map id for the label to category, category tells which radio button is checked or not
         --idToLabels: maps id to labels
         --onChange: what happens when the value changes
+          (Hint: to change your state, use the e.target.dataset.category)
         --currentCategory: which category (radio-btton) is currently checked
         --className: as always, this will be applied to the returned div element
         --name: the name that will be common to all radio so that only one can be selected

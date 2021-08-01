@@ -65,8 +65,8 @@ export default function useValidator(
   // this is the majic function which will validate
   function validate(identity, value) {
     /* 
-    The validate function returns a value if the validator is synchronous
-    and will return a promise if the vaidator is asynchronous 
+    The validate function returns a value(boolean) if the validator is synchronous
+    and will return a promise(will resolve to a boolean) if the vaidator is asynchronous 
 
     Dont worry if you are just interested in validation, validation will be done automatically
 
