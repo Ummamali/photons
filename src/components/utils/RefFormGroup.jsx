@@ -33,8 +33,20 @@ const RefFormGroup = forwardRef((props, ref) => {
         >>>>  resetValidity function(e)
           (this should be an event handler, and will be called upon focus)
         NOTE: Above two handler will have input element as targets, with a special dataset value of 'identity', use this to know which input is the point of interest
-
       }
+
+    How This Component Looks Like (copy this and provide appropriate props):
+        <RefFormGroup
+          vData={}
+          id=""
+          label=""
+          type="text"
+          placeholder=""
+          autoComplete="off"
+          validate={}
+          resetValidity={}
+          ref={}
+        />
   
   */
   const isInvalid = props.vData.vStatus === 3;

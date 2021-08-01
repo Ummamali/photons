@@ -7,21 +7,13 @@ import { useEffect } from "react";
 import { useState } from "react";
 import RefFormGroup from "../../utils/RefFormGroup";
 import RadioButtons from "../../utils/RadioButtons";
+import PaymentInput from "./PaymentInput";
 
 // following are the validatorrs
 const vErrorMessages = {
   donorName: "Donor name must contain atleast 5 and atmost 20 characters",
   amount: "Invalid amount, must be greater than 0",
-};
-
-// for the radio buttons
-const modeIdtoCategories = {
-  "radio-paid": "MONEY",
-  "radio-not-paid": "DATE",
-};
-const modeIdToLabels = {
-  "radio-paid": "Money",
-  "radio-not-paid": "Date",
+  addAmount: "Invalid amount, must be greater than 0",
 };
 
 // Component --------------------------------
@@ -36,15 +28,11 @@ export default function DonorEditModel() {
   // current donor object
   const currDonor = donors.data[name];
 
-  // keeping track of the mode of collection PAID NOTPAID
-  const [paymentMode, setPaymentMode] = useState(
-    currDonor.hasPaid ? "MONEY" : "DATE"
-  );
-
   // references
   const inputRefs = {
     donorName: useRef(),
     amount: useRef(),
+    addAmount: useRef(),
   };
 
   // VALIDATIONS
@@ -61,6 +49,7 @@ export default function DonorEditModel() {
       }
     },
     amount: (value) => ({ isValid: value > 0 }),
+    addAmount: (value) => ({ isValid: value > 0 }),
   };
   const [validityStatuses, dispatchValidator, validateCore] = useValidator(
     vErrorMessages,
@@ -92,9 +81,9 @@ export default function DonorEditModel() {
     inputRefs.amount.current.value = amountInputValue;
   }, []);
   return (
-    <Model className="bg-white p-12 w-hard-small">
+    <Model className="bg-white w-hard-small">
       <h2 className="text-2xl mb-4 text-gray-700">Edit Donor</h2>
-      <form>
+      <div>
         <div className="space-y-4">
           <RefFormGroup
             vData={validityStatuses.donorName}
@@ -107,39 +96,33 @@ export default function DonorEditModel() {
             resetValidity={resetValidity}
             ref={inputRefs.donorName}
           />
-          <div>
-            <div className="flex items-center justify-between mb-1">
-              <p className="text-gray-500 mr-6">Payment</p>
-              <RadioButtons
-                idToCategory={modeIdtoCategories}
-                idToLabels={modeIdToLabels}
-                name="edit-payment-mode"
-                onChange={(e) => setPaymentMode(e.target.dataset.category)}
-                currentCategory={paymentMode}
-                className="default-radios flex items-center space-x-4 text-gray-500 text-sm"
-              />
-            </div>
-            {paymentMode === "MONEY" ? (
-              <RefFormGroup
-                vData={validityStatuses.amount}
-                id="amount"
-                type="number"
-                placeholder="Enter new amount here..."
-                autoComplete="off"
-                validate={validateInputs}
-                resetValidity={resetValidity}
-                ref={inputRefs.amount}
-              />
-            ) : (
-              <input
-                type="date"
-                className="border border-gray-400 border-opacity-60 block w-full focus:outline-none focus:border-gray-600 text-gray-500 rounded p-2 text-sm"
-                ref={inputRefs.amount}
-              />
-            )}
-          </div>
+          <PaymentInput
+            hasPaid={currDonor.hasPaid}
+            validate={validateInputs}
+            resetValidity={resetValidity}
+            vData={validityStatuses.amount}
+            ref={inputRefs.amount}
+          />
         </div>
-      </form>
+        <div className="bg-gray-200 px-4 py-2">
+          <RefFormGroup
+            vData={validityStatuses.addAmount}
+            id="addAmount"
+            label="Add Amount"
+            type="text"
+            placeholder="Add more amount to total..."
+            autoComplete="off"
+            validate={validateInputs}
+            resetValidity={resetValidity}
+            ref={inputRefs.addAmount}
+            className="mb-3"
+            hideIcons={true}
+          />
+          <button className="py-1 px-4 bg-gray-700 text-gray-300">
+            Add Amount
+          </button>
+        </div>
+      </div>
     </Model>
   );
 }

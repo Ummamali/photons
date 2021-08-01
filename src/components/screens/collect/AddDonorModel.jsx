@@ -5,6 +5,7 @@ import useValidator, { vActions } from "../../../hooks/useValidator";
 import Model from "../../utils/Model";
 import RefFormGroup from "../../utils/RefFormGroup";
 import ReqButton from "../../utils/ReqButton";
+import PaymentInput from "./PaymentInput";
 
 // following are the validatorrs
 const vIdentityList = {
@@ -86,16 +87,12 @@ export default function AddDonorModel() {
             resetValidity={resetValidity}
             autoComplete="off"
           />
-          <RefFormGroup
-            vData={vStatuses.amount}
-            id="amount"
-            label="Amount"
-            type="text"
-            ref={inputRefs.amount}
-            placeholder="Amount..."
+          <PaymentInput
+            hasPaid={true}
             validate={validateInput}
             resetValidity={resetValidity}
-            hideIcons={true}
+            vData={vStatuses.amount}
+            ref={inputRefs.amount}
           />
         </div>
         <ReqButton type="submit" className="px-12 text-sm" reqStatus={2}>
