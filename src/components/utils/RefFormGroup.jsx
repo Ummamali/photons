@@ -47,6 +47,13 @@ const RefFormGroup = forwardRef((props, ref) => {
           resetValidity={}
           ref={}
         />
+
+    Stylings:
+      Give custom classes to the group with className prop
+      The returned parent has three elements, you can select them as:
+        -- label
+        -- .input-contain
+        -- p.invalid-msg
   
   */
   const isInvalid = props.vData.vStatus === 3;
@@ -72,7 +79,7 @@ const RefFormGroup = forwardRef((props, ref) => {
       <label htmlFor={props.id} className="block text-gray-500 mb-1">
         {props.label}
       </label>
-      <div className="relative">
+      <div className="relative input-contain">
         <input
           type={props.type}
           id={props.id}
