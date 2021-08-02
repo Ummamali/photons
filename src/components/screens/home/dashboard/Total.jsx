@@ -48,7 +48,7 @@ export default function Total() {
         <h2 className="text-3xl">{total.toLocaleString("en-US")}</h2>
       </div>
       <div className="text-center">
-        <h2 className="text-5xl text-gray-700">{month[0]}</h2>
+        <h2 className="text-5xl text-gray-700 mb-1">{month[0]}</h2>
         <h2 className="text-2xl text-gray-600">{month[1]}</h2>
       </div>
     </div>
