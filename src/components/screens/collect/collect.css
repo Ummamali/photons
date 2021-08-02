@@ -47,3 +47,18 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
 }
+
+/* the input in the model component DonorEditModel */
+.donor-edit-modal {
+  width: 600px;
+}
+.donor-add {
+  display: grid;
+  grid-template-columns: 100px auto;
+  align-items: center;
+  flex-grow: 1;
+  font-size: 0.9rem;
+}
+.donor-add p.invalid-msg {
+  display: none;
+}

@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import Model from "../../utils/Model";
-import { useLocation } from "react-router-dom";
+import { Redirect, useHistory, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import useValidator, { vActions } from "../../../hooks/useValidator";
 import { useEffect } from "react";
@@ -16,7 +16,7 @@ const vErrorMessages = {
   addAmount: "Invalid amount, must be greater than 0",
 };
 
-// Component --------------------------------
+// Wrapper Component which should be imported
 export default function DonorEditModel() {
   const locationObj = useLocation();
   const searchParams = new URLSearchParams(locationObj.search);
@@ -27,7 +27,17 @@ export default function DonorEditModel() {
 
   // current donor object
   const currDonor = donors.data[name];
+  return currDonor === undefined ? (
+    <Redirect to="/collect" />
+  ) : (
+    <InternalEditModel donors={donors} currDonor={currDonor} />
+  );
+}
 
+// Internal component which will load if name is valid --------------------------------
+function InternalEditModel({ donors, currDonor }) {
+  // history object to close
+  const historyObj = useHistory();
   // references
   const inputRefs = {
     donorName: useRef(),
@@ -80,11 +90,18 @@ export default function DonorEditModel() {
     }
     inputRefs.amount.current.value = amountInputValue;
   }, []);
+
+  // close the model
+  function closeIt() {
+    historyObj.replace("/collect");
+  }
   return (
-    <Model className="bg-white w-hard-small">
-      <h2 className="text-2xl mb-4 text-gray-700">Edit Donor</h2>
+    <Model className="bg-white donor-edit-modal py-12 px-8" onClose={closeIt}>
+      <h2 className="text-3xl mb-4 text-gray-700">
+        <i className="fas fa-pencil-alt mr-2"></i>Edit Donor
+      </h2>
       <div>
-        <div className="space-y-4">
+        <div className="space-y-4 mb-4">
           <RefFormGroup
             vData={validityStatuses.donorName}
             id="donorName"
@@ -104,7 +121,7 @@ export default function DonorEditModel() {
             ref={inputRefs.amount}
           />
         </div>
-        <div className="bg-gray-200 px-4 py-2">
+        <div className="border border-gray-400 px-4 py-4 bg-gray-50 flex items-center justify-between mb-6">
           <RefFormGroup
             vData={validityStatuses.addAmount}
             id="addAmount"
@@ -115,11 +132,19 @@ export default function DonorEditModel() {
             validate={validateInputs}
             resetValidity={resetValidity}
             ref={inputRefs.addAmount}
-            className="mb-3"
+            className="donor-add mr-3"
             hideIcons={true}
           />
-          <button className="py-1 px-4 bg-gray-700 text-gray-300">
-            Add Amount
+          <button className="py-1 px-4 bg-gray-700 text-gray-300 text-sm rounded">
+            <i className="fas fa-plus"></i>
+          </button>
+        </div>
+        <div>
+          <button className="bg-primary py-2 px-16 text-white text-opacity-80 mr-4">
+            Save
+          </button>
+          <button className="text-gray-700" onClick={closeIt}>
+            Cancel
           </button>
         </div>
       </div>
