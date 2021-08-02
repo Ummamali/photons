@@ -127,7 +127,7 @@ export default function CollectScreen() {
               <i className="far fa-frown ml-2 text-red-600"></i>
             </p>
           )}
-          {<AddMoreBtn />}
+          <AddMoreBtn />
         </div>
       </div>
     </LoadedScreen>

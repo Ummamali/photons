@@ -1,13 +1,14 @@
-import React, { useRef } from "react";
+import React, { useState } from "react";
 import Model from "../../utils/Model";
 import { Redirect, useHistory, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import useValidator, { vActions } from "../../../hooks/useValidator";
-import { useEffect } from "react";
-import { useState } from "react";
+import useValidator, {
+  getDefaultResetValidator,
+  getDefaultValidator,
+} from "../../../hooks/useValidator";
 import RefFormGroup from "../../utils/RefFormGroup";
-import RadioButtons from "../../utils/RadioButtons";
-import PaymentInput from "./PaymentInput";
+import PaymentInput, { getPaymentChangeHandler } from "./PaymentInput";
+import ControlledFormGroup from "../../utils/ControlledFormGroup";
 
 // following are the validatorrs
 const vErrorMessages = {
@@ -38,12 +39,15 @@ export default function DonorEditModel() {
 function InternalEditModel({ donors, currDonor }) {
   // history object to close
   const historyObj = useHistory();
-  // references
-  const inputRefs = {
-    donorName: useRef(),
-    amount: useRef(),
-    addAmount: useRef(),
-  };
+
+  // state of the inputs
+  const [donorName, setDonorName] = useState(currDonor.name);
+  const [donorMoney, setDonorMoney] = useState(
+    currDonor.hasPaid ? currDonor.amount : ""
+  );
+  const [donorDate, setDonorDate] = useState("");
+  const [addAmount, setAddAmount] = useState("");
+  const [paymentMode, setPaymentMode] = useState("MONEY");
 
   // VALIDATIONS
   // as the validators require the state therefore, they must be inside of the component
@@ -61,40 +65,24 @@ function InternalEditModel({ donors, currDonor }) {
     amount: (value) => ({ isValid: value > 0 }),
     addAmount: (value) => ({ isValid: value > 0 }),
   };
+
   const [validityStatuses, dispatchValidator, validateCore] = useValidator(
     vErrorMessages,
     validators
   );
+  const validateInputs = getDefaultValidator(validateCore);
+  const resetValidity = getDefaultResetValidator(dispatchValidator);
 
-  // to validate the inpute
-  function validateInputs(e) {
-    const target = e.target;
-    validateCore(target.dataset.identity, target.value);
-  }
-  // to reset the validity
-  function resetValidity(e) {
-    const identity = e.target.dataset.identity;
-    dispatchValidator(vActions.RESET({ identity }));
-  }
-
-  // to populate the fields upon load
-  useEffect(() => {
-    inputRefs.donorName.current.value = currDonor.name;
-    let amountInputValue = currDonor.amount;
-    if (!currDonor.hasPaid) {
-      const dateObj = new Date(amountInputValue);
-      const month = (dateObj.getMonth() + 1).toString().padStart(2, "0");
-      console.log(month);
-      const date = dateObj.getDate().toString().padStart(2, "0");
-      amountInputValue = `${dateObj.getFullYear()}-${month}-${date}`;
-    }
-    inputRefs.amount.current.value = amountInputValue;
-  }, []);
+  const paymentChangeHandler = getPaymentChangeHandler(
+    setDonorMoney,
+    setDonorDate
+  );
 
   // close the model
   function closeIt() {
     historyObj.replace("/collect");
   }
+
   return (
     <Model className="bg-white donor-edit-modal py-12 px-8" onClose={closeIt}>
       <h2 className="text-3xl mb-4 text-gray-700">
@@ -102,7 +90,7 @@ function InternalEditModel({ donors, currDonor }) {
       </h2>
       <div>
         <div className="space-y-4 mb-4">
-          <RefFormGroup
+          <ControlledFormGroup
             vData={validityStatuses.donorName}
             id="donorName"
             label="Donor Name"
@@ -111,18 +99,24 @@ function InternalEditModel({ donors, currDonor }) {
             autoComplete="off"
             validate={validateInputs}
             resetValidity={resetValidity}
-            ref={inputRefs.donorName}
+            value={donorName}
+            onChange={(e) => setDonorName(e.target.value)}
           />
           <PaymentInput
-            hasPaid={currDonor.hasPaid}
             validate={validateInputs}
             resetValidity={resetValidity}
             vData={validityStatuses.amount}
-            ref={inputRefs.amount}
+            moneyValue={donorMoney}
+            dateValue={donorDate}
+            onChange={paymentChangeHandler}
+            paymentMode={paymentMode}
+            onPaymentModeChange={(e) =>
+              setPaymentMode(e.target.dataset.category)
+            }
           />
         </div>
-        <div className="border border-gray-400 px-4 py-4 bg-gray-50 flex items-center justify-between mb-6">
-          <RefFormGroup
+        <div className="border border-gray-400 border-opacity-70 px-4 py-4 bg-gray-50 flex items-center justify-between mb-6">
+          <ControlledFormGroup
             vData={validityStatuses.addAmount}
             id="addAmount"
             label="Add Amount"
@@ -131,9 +125,10 @@ function InternalEditModel({ donors, currDonor }) {
             autoComplete="off"
             validate={validateInputs}
             resetValidity={resetValidity}
-            ref={inputRefs.addAmount}
             className="donor-add mr-3"
             hideIcons={true}
+            value={addAmount}
+            onChange={(e) => setAddAmount(e.target.value)}
           />
           <button className="py-1 px-4 bg-gray-700 text-gray-300 text-sm rounded">
             <i className="fas fa-plus"></i>

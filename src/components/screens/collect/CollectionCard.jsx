@@ -1,8 +1,10 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import { truncate } from "../../../utilFuncs/basics";
 
 const CollectionCard = React.memo(({ donorObj, mode }) => {
   let amountEl;
+  const historyObj = useHistory();
   if (donorObj.hasPaid) {
     amountEl = (
       <>
@@ -27,7 +29,11 @@ const CollectionCard = React.memo(({ donorObj, mode }) => {
       </div>
       {mode === "EDIT" && (
         <div className="flex flex-col justify-center border-l border-gray-300 pl-3 ml-2">
-          <button>
+          <button
+            onClick={() =>
+              historyObj.push(`/collect/edit?name=${donorObj.name}`)
+            }
+          >
             <i className="fas fa-pencil-alt text-yellow-700"></i>
           </button>
           <button>

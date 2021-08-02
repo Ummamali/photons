@@ -123,3 +123,36 @@ export default function useValidator(
   }
   return [validityStatuses, dispatchValidity, validate];
 }
+
+// Some utility functions to be used
+
+export function getDefaultValidator(validateCore) {
+  /*
+  Returns a blur event handler which will validate on blur:
+    --validateCore should be the same function as returned by the hook
+  */
+  return (e) => {
+    const target = e.target;
+    validateCore(target.dataset.identity, target.value);
+  };
+}
+
+export function getDefaultResetValidator(dispatchValidator) {
+  /*
+  Returns a focus event handler which will reset validate on focus:
+    --dispatch should be the same function as returned by the hook
+  */
+  return (e) => {
+    const identity = e.target.dataset.identity;
+    dispatchValidator(vActions.RESET({ identity }));
+  };
+}
+
+export function syncValidateAll(identityStates, validatorCore) {
+  // returns whether the given values are valid or not
+  const validations = [];
+  for (const [identity, value] of Object.entries(identityStates)) {
+    validations.push(validatorCore(identity, value));
+  }
+  return !validations.includes(false);
+}

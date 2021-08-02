@@ -1,11 +1,15 @@
-import React from "react";
-import { useRef } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import useValidator, { vActions } from "../../../hooks/useValidator";
+import { useHistory } from "react-router-dom";
+import useValidator, {
+  getDefaultResetValidator,
+  getDefaultValidator,
+  syncValidateAll,
+} from "../../../hooks/useValidator";
+import ControlledFormGroup from "../../utils/ControlledFormGroup";
 import Model from "../../utils/Model";
-import RefFormGroup from "../../utils/RefFormGroup";
 import ReqButton from "../../utils/ReqButton";
-import PaymentInput from "./PaymentInput";
+import PaymentInput, { getPaymentChangeHandler } from "./PaymentInput";
 
 // following are the validatorrs
 const vIdentityList = {
@@ -15,11 +19,13 @@ const vIdentityList = {
 
 // Component -----------------------------
 export default function AddDonorModel() {
-  // references to input elements
-  const inputRefs = {
-    donorName: useRef(),
-    amount: useRef(),
-  };
+  const historyObj = useHistory();
+
+  // state of the inputs
+  const [donorName, setDonorName] = useState("");
+  const [donorMoney, setDonorMoney] = useState("");
+  const [donorDate, setDonorDate] = useState("");
+  const [paymentMode, setPaymentMode] = useState("MONEY");
 
   // getting the donors for validations, as collectScreen is a LoadScreen, this donors stte will be populated already
   const donors = useSelector((state) => state.donors);
@@ -43,56 +49,61 @@ export default function AddDonorModel() {
     validators
   );
 
-  //   the validator function
-  function validateInput(e) {
-    const value = e.target.value;
-    const identity = e.target.dataset.identity;
-    validateCore(identity, value);
-  }
+  const paymentChangeHandler = getPaymentChangeHandler(
+    setDonorMoney,
+    setDonorDate
+  );
 
-  //   to reset the validity
-  function resetValidity(e) {
-    const identity = e.target.dataset.identity;
-    dispatchValidator(vActions.RESET({ identity }));
-  }
+  //   the validator function
+  const validateInput = getDefaultValidator(validateCore);
+  const resetValidity = getDefaultResetValidator(dispatchValidator);
 
   // form submit handler
   function submitHandler(e) {
     e.preventDefault();
-    const formValues = {};
-    const validations = [];
-    for (const [identity, ref] of Object.entries(inputRefs)) {
-      formValues[identity] = ref.current.value;
-      validations.push(validateCore(identity, ref.current.value));
-    }
-    const formIsValid = !validations.includes(false);
-    if (formIsValid) {
-      console.log("submitting the donors add form");
-    }
+    const formIsValid = syncValidateAll(
+      { donorName: donorName, amount: donorMoney },
+      validateCore
+    );
+    console.log(formIsValid);
+  }
+
+  function closeIt() {
+    historyObj.push("/collect");
   }
 
   return (
-    <Model className="bg-white w-hard-small p-12 rounded shadow">
+    <Model
+      className="bg-white w-hard-small p-12 rounded shadow"
+      onClose={closeIt}
+    >
       <h2 className="text-2xl text-gray-800 mb-4">Add a new donor</h2>
       <form onSubmit={submitHandler}>
         <div className="space-y-3 mb-4">
-          <RefFormGroup
+          <ControlledFormGroup
             vData={vStatuses.donorName}
             id="donorName"
             label="Donor Name"
             type="text"
-            ref={inputRefs.donorName}
             placeholder="Name of the donor....."
             validate={validateInput}
             resetValidity={resetValidity}
             autoComplete="off"
+            value={donorName}
+            onChange={(e) => setDonorName(e.target.value)}
           />
           <PaymentInput
             hasPaid={true}
             validate={validateInput}
             resetValidity={resetValidity}
             vData={vStatuses.amount}
-            ref={inputRefs.amount}
+            moneyValue={donorMoney}
+            dateValue={donorDate}
+            onChange={paymentChangeHandler}
+            paymentMode={paymentMode}
+            onPaymentModeChange={(e) =>
+              setPaymentMode(e.target.dataset.category)
+            }
           />
         </div>
         <ReqButton type="submit" className="px-12 text-sm" reqStatus={2}>

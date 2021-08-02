@@ -59,6 +59,9 @@ No component is importing the stylesheet so you have to do it manually
   z-index: 100;
   backdrop-filter: blur(2.5px);
 }
+#model .backdrop:hover {
+  cursor: pointer;
+}
 #model .model-card {
   position: fixed;
   top: 50%;
