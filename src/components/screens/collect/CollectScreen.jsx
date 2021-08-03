@@ -26,9 +26,6 @@ export default function CollectScreen() {
   const donors = useSelector((state) => state.donors);
   const dispatch = useDispatch();
 
-  // using the history obj to close models
-  const historyObj = useHistory();
-
   // requesting the server upon mount
   useEffect(() => {
     dispatch(loadDonors());
@@ -44,7 +41,7 @@ export default function CollectScreen() {
   // updating the results whenever collectionRadio changes
   useEffect(() => {
     updateResults();
-  }, [currCollectRadio]);
+  }, [currCollectRadio, donors]);
 
   function updateResults() {
     // when called, updates the results state depending on the radiobutton options
@@ -61,10 +58,6 @@ export default function CollectScreen() {
     setResults(newResults);
   }
 
-  // for closeing the model if opened
-  function closeModel() {
-    historyObj.push("/collect");
-  }
   return (
     <LoadedScreen loadStatus={donors.loadStatus}>
       <div id="collect">

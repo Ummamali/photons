@@ -5,6 +5,7 @@ import contributorsSlice from "./contributorsSlice";
 import thisMonthSlice from "./thisMonthSlice";
 import recentsSlice from "./recentsSlice";
 import donorSlice from "./donorSlice";
+import donorDiffSlice from "./donorDiffSlice";
 
 const mainStore = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const mainStore = configureStore({
     thisMonth: thisMonthSlice.reducer,
     recents: recentsSlice.reducer,
     donors: donorSlice.reducer,
+    donorDiff: donorDiffSlice.reducer,
   },
 });
 

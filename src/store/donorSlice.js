@@ -10,7 +10,18 @@ import {
 const donorSlice = createSlice({
   name: "donors",
   initialState: asyncSliceInitial,
-  reducers: { ...asyncSliceReducers },
+  reducers: {
+    ...asyncSliceReducers,
+    update: (state, action) => {
+      // this is the UPDATE part of CRUD
+      delete state.data[action.payload.prevName];
+      state.data[action.payload.newDonor.name] = action.payload.newDonor;
+    },
+    delete: (state, action) => {
+      // deletes the given name from the diff state, this is DELETE part of CRUD
+      delete state.data[action.payload.name];
+    },
+  },
 });
 
 export const donorsActions = donorSlice.actions;
