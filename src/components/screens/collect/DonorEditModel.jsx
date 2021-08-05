@@ -14,7 +14,7 @@ import { updateDonor } from "../../../store/thunks";
 
 // following are the validatorrs
 const vErrorMessages = {
-  donorName: "Donor name must contain atleast 5 and atmost 20 characters",
+  donorName: "Donor name must contain atleast 5 and atmost 34 characters",
   amount: "Invalid amount, must be greater than 0",
   addAmount: "Invalid amount, must be greater than 0",
 };
@@ -60,7 +60,7 @@ function InternalEditModel({ donors, currDonor }) {
   // as the validators require the state therefore, they must be inside of the component
   const validators = {
     donorName: (value) => {
-      if (value.length >= 5 && value.length < 20) {
+      if (value.length >= 5 && value.length < 34) {
         let available = !(value in donors.data);
         available = value === currDonor.name ? true : available;
         const msg = available ? null : "This name already exists, use another!";

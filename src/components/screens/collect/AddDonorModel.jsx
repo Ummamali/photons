@@ -13,7 +13,7 @@ import PaymentInput, { getPaymentChangeHandler } from "./PaymentInput";
 
 // following are the validatorrs
 const vIdentityList = {
-  donorName: "Donor name must contain atleast 5 and atmost 20 characters",
+  donorName: "Donor name must contain atleast 5 and atmost 34 characters",
   amount: "Invalid amount, must be greater than 0",
 };
 
@@ -33,7 +33,7 @@ export default function AddDonorModel() {
   // as the validators require the state therefore, they must be inside of the component
   const validators = {
     donorName: (value) => {
-      if (value.length >= 5 && value.length < 20) {
+      if (value.length >= 5 && value.length < 34) {
         const available = !(value in donors.data);
         const msg = available ? null : "This name already exists, use another!";
         return { isValid: available, msg };

@@ -77,6 +77,10 @@ button:active {
   background-color: var(--color-primary);
 }
 
+.bg-comp {
+  background-color: var(--color-complementary);
+}
+
 .bg-user {
   background-color: var(--color-user);
 }
