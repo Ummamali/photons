@@ -58,3 +58,19 @@ export function updateDonor(newDonorObj, donorPrevName) {
     );
   };
 }
+
+// to add a new donor
+export function addDonor(newDonor) {
+  return (dispatch) => {
+    dispatch(donorDiffActions.add({ newDonor }));
+    dispatch(donorsActions.add({ newDonor }));
+  };
+}
+
+// deletes the donor
+export function deleteDonor(donorName) {
+  return (dispatch) => {
+    dispatch(donorDiffActions.delete({ donorName }));
+    dispatch(donorsActions.delete({ donorName }));
+  };
+}

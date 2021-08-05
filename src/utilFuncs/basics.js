@@ -23,3 +23,24 @@ export function stamptoDateValue(timeStamp) {
 export function dateValueToStamp(dateValue) {
   return new Date(dateValue).getTime();
 }
+
+export function getDonorFromFields(allDataFields, paymentMode) {
+  /*
+  Donor object looks like this
+  {
+    name: String,
+    amount: Sring,
+    hasPaid: Boolean
+  }
+  
+  */
+  const donorObj = { name: allDataFields.donorName };
+  if (paymentMode === "MONEY") {
+    donorObj.amount = parseInt(allDataFields.donorMoney);
+    donorObj.hasPaid = true;
+  } else if (paymentMode === "DATE") {
+    donorObj.amount = dateValueToStamp(allDataFields.donorDate);
+    donorObj.hasPaid = false;
+  }
+  return donorObj;
+}

@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Route, useHistory } from "react-router-dom";
+import { Route } from "react-router-dom";
 import "./collect.css";
 import { modeRadioData, collectRadioData } from "./radioButtonData";
 import RadioButtons from "../../utils/RadioButtons";
@@ -26,6 +26,13 @@ export default function CollectScreen() {
   const donors = useSelector((state) => state.donors);
   const dispatch = useDispatch();
 
+  const [brief, setbrief] = useState({
+    total: 0,
+    date: 0,
+    money: 0,
+    donors: 0,
+  });
+
   // requesting the server upon mount
   useEffect(() => {
     dispatch(loadDonors());
@@ -46,6 +53,12 @@ export default function CollectScreen() {
   function updateResults() {
     // when called, updates the results state depending on the radiobutton options
     const newResults = [];
+    const newBrief = {
+      total: 0,
+      date: 0,
+      money: 0,
+      donors: 0,
+    };
     for (const donorObj of Object.values(donors.data)) {
       if (
         (donorObj.hasPaid && currCollectRadio === "SUCCESS") ||
@@ -53,9 +66,14 @@ export default function CollectScreen() {
         currCollectRadio === "ALL"
       ) {
         newResults.push(donorObj);
+        newBrief.money += donorObj.hasPaid ? 1 : 0;
+        newBrief.total += donorObj.hasPaid ? donorObj.amount : 0;
       }
     }
+    newBrief.date = newResults.length - newBrief.money;
+    newBrief.donors = newResults.length;
     setResults(newResults);
+    setbrief(newBrief);
   }
 
   return (
@@ -72,13 +90,17 @@ export default function CollectScreen() {
             <h1 className="text-gray-700">
               <i className="fas fa-box-open mr-1"></i>Collections
             </h1>
-            <p className="text-gray-600">Temporary Contributors: 20</p>
+            <p className="text-gray-600">
+              Temporary Contributors: {brief.donors}
+            </p>
           </div>
           <div className="border-l border-gray-400 border-opacity-60 pl-6">
-            <h2 className="leading-none mb-3">Total: 2,500/-</h2>
+            <h2 className="leading-none mb-3">
+              Total: {brief.total.toLocaleString()}/-
+            </h2>
             <div className="text-gray-600">
-              <p>Successful Contributions: 12</p>
-              <p>Remaining Contributions: 8</p>
+              <p>Successful Contributions: {brief.money}</p>
+              <p>Remaining Contributions: {brief.date}</p>
             </div>
           </div>
         </div>

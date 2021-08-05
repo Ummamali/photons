@@ -19,7 +19,11 @@ const donorSlice = createSlice({
     },
     delete: (state, action) => {
       // deletes the given name from the diff state, this is DELETE part of CRUD
-      delete state.data[action.payload.name];
+      delete state.data[action.payload.donorName];
+    },
+    add: (state, action) => {
+      // add a new donor to the slice its like CREATE
+      state.data[action.payload.newDonor.name] = action.payload.newDonor;
     },
   },
 });

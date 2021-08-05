@@ -11,7 +11,11 @@ const donorDiffSlice = createSlice({
     },
     delete: (state, action) => {
       // deletes the given key from the diff state, this is DELETE
-      delete state[action.payload.name];
+      state[action.payload.donorName] = "DELETED";
+    },
+    add: (state, action) => {
+      // add a new user to the slice, its like CREATE
+      state[action.payload.newDonor.name] = action.payload.newDonor;
     },
     reset: (state) => {
       // sets the state back to {}

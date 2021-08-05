@@ -9,7 +9,11 @@ import useValidator, {
 } from "../../../hooks/useValidator";
 import PaymentInput, { getPaymentChangeHandler } from "./PaymentInput";
 import ControlledFormGroup from "../../utils/ControlledFormGroup";
-import { dateValueToStamp, stamptoDateValue } from "../../../utilFuncs/basics";
+import {
+  dateValueToStamp,
+  getDonorFromFields,
+  stamptoDateValue,
+} from "../../../utilFuncs/basics";
 import { updateDonor } from "../../../store/thunks";
 
 // following are the validatorrs
@@ -107,21 +111,13 @@ function InternalEditModel({ donors, currDonor }) {
     }
     const formIsValid = syncValidateAll(formValues, validateCore);
     if (formIsValid) {
-      let newFields;
-      if (paymentMode === "MONEY") {
-        newFields = {
-          name: donorName,
-          amount: parseInt(donorMoney),
-          hasPaid: true,
-        };
-      } else if (paymentMode === "DATE") {
-        newFields = {
-          name: donorName,
-          amount: dateValueToStamp(donorDate),
-          hasPaid: false,
-        };
-      }
-      dispatchStore(updateDonor(newFields, currDonor.name));
+      dispatchStore(
+        updateDonor(
+          getDonorFromFields({ donorName, donorDate, donorMoney }, paymentMode),
+          currDonor.name
+        )
+      );
+      historyObj.replace(`/collect`);
     }
   }
 

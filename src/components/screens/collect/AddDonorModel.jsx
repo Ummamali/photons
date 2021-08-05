@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import useValidator, {
   getDefaultResetValidator,
   getDefaultValidator,
   syncValidateAll,
 } from "../../../hooks/useValidator";
+import { addDonor } from "../../../store/thunks";
+import { getDonorFromFields } from "../../../utilFuncs/basics";
 import ControlledFormGroup from "../../utils/ControlledFormGroup";
 import Model from "../../utils/Model";
 import ReqButton from "../../utils/ReqButton";
@@ -29,6 +31,7 @@ export default function AddDonorModel() {
 
   // getting the donors for validations, as collectScreen is a LoadScreen, this donors stte will be populated already
   const donors = useSelector((state) => state.donors);
+  const dispatchStore = useDispatch();
 
   // as the validators require the state therefore, they must be inside of the component
   const validators = {
@@ -61,11 +64,19 @@ export default function AddDonorModel() {
   // form submit handler
   function submitHandler(e) {
     e.preventDefault();
-    const formIsValid = syncValidateAll(
-      { donorName: donorName, amount: donorMoney },
-      validateCore
-    );
-    console.log(formIsValid);
+    const formValues = { donorName };
+    if (paymentMode === "MONEY") {
+      formValues.amount = donorMoney;
+    }
+    const formIsValid = syncValidateAll(formValues, validateCore);
+    if (formIsValid) {
+      dispatchStore(
+        addDonor(
+          getDonorFromFields({ donorName, donorMoney, donorDate }, paymentMode)
+        )
+      );
+      historyObj.replace(`/collect`);
+    }
   }
 
   function closeIt() {
