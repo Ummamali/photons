@@ -14,7 +14,7 @@ import AddMoreBtn from "./AddMoreBtn";
 import AddDonorModel from "./AddDonorModel";
 import { loadDonorsDataFromLS } from "../../../store/thunks";
 import { updateLocalStorage } from "../../../store/shared";
-import StatusBar from "./StatusBar";
+import StatusBar, { statusStates } from "./StatusBar";
 
 export default function CollectScreen() {
   // the results state which is the core functionality
@@ -85,7 +85,7 @@ export default function CollectScreen() {
 
   return (
     <>
-      <StatusBar donors={donors} donorDiff={globalState.donorDiff} />
+      <StatusBar currentStatus={statusStates.dataSaving} />
       <LoadedScreen loadStatus={donors.loadStatus}>
         <div id="collect">
           <Route exact path="/collect/edit">
