@@ -64,3 +64,9 @@ export function generateAsyncThunk(sliceName, actionsObj, asyncLoader) {
     };
   };
 }
+
+// given the state, it will update the local storage
+export function updateLocalStorage(state) {
+  localStorage.setItem("donors", JSON.stringify(state.donors.data));
+  localStorage.setItem("donorDiff", JSON.stringify(state.donorDiff));
+}

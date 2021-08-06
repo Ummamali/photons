@@ -3,8 +3,9 @@
 import { contributorsActions } from "./contributorsSlice";
 import { thisMonthActions } from "./thisMonthSlice";
 import { recentsActions } from "./recentsSlice";
-import { donorDiffActions } from "./donorDiffSlice";
+import donorDiffSlice, { donorDiffActions } from "./donorDiffSlice";
 import { donorsActions } from "./donorSlice";
+import { updateLocalStorage } from "./shared";
 
 /*
   Following thunks are used to add contributions and contributor
@@ -44,7 +45,7 @@ Followint thunks are for donors, the C(R)UD thunks
 
 // the donor update thunk
 export function updateDonor(newDonorObj, donorPrevName) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     // first changing the diff slice
     dispatch(
       donorDiffActions.update({
@@ -56,21 +57,38 @@ export function updateDonor(newDonorObj, donorPrevName) {
     dispatch(
       donorsActions.update({ prevName: donorPrevName, newDonor: newDonorObj })
     );
+    updateLocalStorage(getState());
   };
 }
 
 // to add a new donor
 export function addDonor(newDonor) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch(donorDiffActions.add({ newDonor }));
     dispatch(donorsActions.add({ newDonor }));
+    updateLocalStorage(getState());
   };
 }
 
 // deletes the donor
 export function deleteDonor(donorName) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch(donorDiffActions.delete({ donorName }));
     dispatch(donorsActions.delete({ donorName }));
+    updateLocalStorage(getState());
+  };
+}
+
+// loads donors from local storage
+export function loadDonorsDataFromLS() {
+  return (dispatch) => {
+    const lsDonors = localStorage.getItem("donors");
+    if (lsDonors !== null) {
+      dispatch(donorsActions.replace({ new: JSON.parse(lsDonors) }));
+    }
+    const lsDonorsDiff = localStorage.getItem("donorsDiff");
+    if (lsDonorsDiff !== null) {
+      dispatch(donorDiffActions.replace({ new: JSON.parse(lsDonorsDiff) }));
+    }
   };
 }

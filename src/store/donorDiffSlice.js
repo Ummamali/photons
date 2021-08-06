@@ -23,6 +23,11 @@ const donorDiffSlice = createSlice({
         delete state[key];
       }
     },
+    replace: (state, action) => {
+      for (const [key, value] of Object.entries(action.payload.new)) {
+        state[key] = value;
+      }
+    },
   },
 });
 

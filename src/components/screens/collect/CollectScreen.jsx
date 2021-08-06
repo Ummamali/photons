@@ -12,6 +12,9 @@ import { useEffect } from "react";
 import { loadDonors } from "../../../store/donorSlice";
 import AddMoreBtn from "./AddMoreBtn";
 import AddDonorModel from "./AddDonorModel";
+import { loadDonorsDataFromLS } from "../../../store/thunks";
+import { updateLocalStorage } from "../../../store/shared";
+import StatusBar from "./StatusBar";
 
 export default function CollectScreen() {
   // the results state which is the core functionality
@@ -23,7 +26,8 @@ export default function CollectScreen() {
   const [currCollectRadio, setCurrCollectRadio] = useState("ALL");
 
   // the donors slice works with this screen
-  const donors = useSelector((state) => state.donors);
+  const globalState = useSelector((state) => state);
+  const donors = globalState.donors;
   const dispatch = useDispatch();
 
   const [brief, setbrief] = useState({
@@ -42,6 +46,9 @@ export default function CollectScreen() {
   useEffect(() => {
     if (donors.loadStatus === 2) {
       updateResults();
+      updateLocalStorage(globalState);
+    } else if (donors.loadStatus === 3) {
+      dispatch(loadDonorsDataFromLS());
     }
   }, [donors.loadStatus]);
 
@@ -77,74 +84,79 @@ export default function CollectScreen() {
   }
 
   return (
-    <LoadedScreen loadStatus={donors.loadStatus}>
-      <div id="collect">
-        <Route exact path="/collect/edit">
-          <DonorEditModel />
-        </Route>
-        <Route exact path="/collect/add">
-          <AddDonorModel />
-        </Route>
-        <div className="collect-head flex justify-between py-6">
-          <div>
-            <h1 className="text-gray-700">
-              <i className="fas fa-box-open mr-1"></i>Collections
-            </h1>
-            <p className="text-gray-600">
-              Temporary Contributors: {brief.donors}
-            </p>
-          </div>
-          <div className="border-l border-gray-400 border-opacity-60 pl-6">
-            <h2 className="leading-none mb-3">
-              Total: {brief.total.toLocaleString()}/-
-            </h2>
-            <div className="text-gray-600">
-              <p>Successful Contributions: {brief.money}</p>
-              <p>Remaining Contributions: {brief.date}</p>
+    <>
+      <StatusBar donors={donors} donorDiff={globalState.donorDiff} />
+      <LoadedScreen loadStatus={donors.loadStatus}>
+        <div id="collect">
+          <Route exact path="/collect/edit">
+            <DonorEditModel />
+          </Route>
+          <Route exact path="/collect/add">
+            <AddDonorModel />
+          </Route>
+          <div className="collect-head flex justify-between py-6">
+            <div>
+              <h1 className="text-gray-700">
+                <i className="fas fa-box-open mr-1"></i>Collections
+              </h1>
+              <p className="text-gray-600">
+                Temporary Contributors: {brief.donors}
+              </p>
+            </div>
+            <div className="border-l border-gray-400 border-opacity-60 pl-6">
+              <h2 className="leading-none mb-3">
+                Total: {brief.total.toLocaleString()}/-
+              </h2>
+              <div className="text-gray-600">
+                <p>Successful Contributions: {brief.money}</p>
+                <p>Remaining Contributions: {brief.date}</p>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="collect-main">
-          <div className="flex justify-between py-4 mb-4">
-            <h2 className="text-3xl text-gray-700">Temporary Contributors</h2>
-            <div className="flex items-center">
-              <RadioButtons
-                idToCategory={modeRadioData.idToCategory}
-                idToLabels={modeRadioData.idToLabels}
-                className="flex items-center justify-center space-x-4 mode-radio mr-12 bg-gray-200 bg-opacity-80 rounded py-1 px-2"
-                name="mode-radio"
-                currentCategory={currModeRadio}
-                onChange={(e) => setCurrModeRadio(e.target.dataset.category)}
-              />
-              <RadioButtons
-                idToCategory={collectRadioData.idToCategory}
-                idToLabels={collectRadioData.idToLabels}
-                className="default-radios flex items-center justify-center space-x-4 text-sm text-gray-700 bg-gray-200 bg-opacity-70 rounded py-1 px-2"
-                name="collect-radio"
-                currentCategory={currCollectRadio}
-                onChange={(e) => setCurrCollectRadio(e.target.dataset.category)}
-              />
-            </div>
-          </div>
-          {results.length > 0 ? (
-            <div className="results">
-              {results.map((donorObj) => (
-                <CollectionCard
-                  donorObj={donorObj}
-                  mode={currModeRadio}
-                  key={donorObj.name}
+          <div className="collect-main">
+            <div className="flex justify-between py-4 mb-4">
+              <h2 className="text-3xl text-gray-700">Temporary Contributors</h2>
+              <div className="flex items-center">
+                <RadioButtons
+                  idToCategory={modeRadioData.idToCategory}
+                  idToLabels={modeRadioData.idToLabels}
+                  className="flex items-center justify-center space-x-4 mode-radio mr-12 bg-gray-200 bg-opacity-80 rounded py-1 px-2"
+                  name="mode-radio"
+                  currentCategory={currModeRadio}
+                  onChange={(e) => setCurrModeRadio(e.target.dataset.category)}
                 />
-              ))}
+                <RadioButtons
+                  idToCategory={collectRadioData.idToCategory}
+                  idToLabels={collectRadioData.idToLabels}
+                  className="default-radios flex items-center justify-center space-x-4 text-sm text-gray-700 bg-gray-200 bg-opacity-70 rounded py-1 px-2"
+                  name="collect-radio"
+                  currentCategory={currCollectRadio}
+                  onChange={(e) =>
+                    setCurrCollectRadio(e.target.dataset.category)
+                  }
+                />
+              </div>
             </div>
-          ) : (
-            <p className="text-center text-gray-500">
-              No temporary contributors to show
-              <i className="far fa-frown ml-2 text-red-600"></i>
-            </p>
-          )}
-          <AddMoreBtn />
+            {results.length > 0 ? (
+              <div className="results">
+                {results.map((donorObj) => (
+                  <CollectionCard
+                    donorObj={donorObj}
+                    mode={currModeRadio}
+                    key={donorObj.name}
+                  />
+                ))}
+              </div>
+            ) : (
+              <p className="text-center text-gray-500">
+                No temporary contributors to show
+                <i className="far fa-frown ml-2 text-red-600"></i>
+              </p>
+            )}
+            <AddMoreBtn />
+          </div>
         </div>
-      </div>
-    </LoadedScreen>
+      </LoadedScreen>
+    </>
   );
 }
