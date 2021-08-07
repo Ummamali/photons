@@ -67,7 +67,10 @@ export function loadDonors() {
               //donor diff is empty
               dispatch(donorsActions.replace({ new: newState }));
             } else {
-              dispatch(globalVariablesActions.set({ donorConflict: true }));
+              // we are merging the donor with donorDiff
+              mergeDonors(newState, LS_items.donorDiff);
+              dispatch(donorsActions.replace({ new: newState }));
+              dispatch(donorDiffActions.replace({ new: LS_items.donorDiff }));
             }
           } else {
             // local storage is empty
@@ -86,4 +89,14 @@ export function loadDonors() {
   };
 }
 
+// inplace merge of donors to donor-diff
+export function mergeDonors(fromServer, diff) {
+  for (const [key, value] of Object.entries(diff)) {
+    if (value === "DELETED") {
+      delete fromServer[key];
+    } else {
+      fromServer[key] = value;
+    }
+  }
+}
 export default donorSlice;

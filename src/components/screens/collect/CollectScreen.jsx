@@ -14,7 +14,6 @@ import AddMoreBtn from "./AddMoreBtn";
 import AddDonorModel from "./AddDonorModel";
 import { updateLocalStorage } from "../../../store/shared";
 import StatusBar, { statusStates } from "./StatusBar";
-import DonorConflict from "./DonorConflict";
 
 export default function CollectScreen() {
   // the results state which is the core functionality
@@ -86,9 +85,7 @@ export default function CollectScreen() {
     setbrief(newBrief);
   }
 
-  return donorConflict ? (
-    <DonorConflict />
-  ) : (
+  return (
     <>
       <StatusBar currentStatus={statusStates.dataSaving} />
       <LoadedScreen loadStatus={donors.loadStatus}>

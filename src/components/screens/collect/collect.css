@@ -64,6 +64,9 @@
 }
 
 /* status bar stylings */
+.collect-status-bar {
+  font-size: 0.78rem;
+}
 .save-btn:disabled {
   opacity: 20%;
   cursor: default;
