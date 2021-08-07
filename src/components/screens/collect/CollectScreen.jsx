@@ -12,9 +12,9 @@ import { useEffect } from "react";
 import { loadDonors } from "../../../store/donorSlice";
 import AddMoreBtn from "./AddMoreBtn";
 import AddDonorModel from "./AddDonorModel";
-import { loadDonorsDataFromLS } from "../../../store/thunks";
 import { updateLocalStorage } from "../../../store/shared";
 import StatusBar, { statusStates } from "./StatusBar";
+import DonorConflict from "./DonorConflict";
 
 export default function CollectScreen() {
   // the results state which is the core functionality
@@ -28,6 +28,7 @@ export default function CollectScreen() {
   // the donors slice works with this screen
   const globalState = useSelector((state) => state);
   const donors = globalState.donors;
+  const donorConflict = globalState.globalVariables.donorConflict;
   const dispatch = useDispatch();
 
   const [brief, setbrief] = useState({
@@ -46,9 +47,11 @@ export default function CollectScreen() {
   useEffect(() => {
     if (donors.loadStatus === 2) {
       updateResults();
-      updateLocalStorage(globalState);
-    } else if (donors.loadStatus === 3) {
-      dispatch(loadDonorsDataFromLS());
+      const localStoragePopulated = localStorage.getItem("donors") !== null;
+      if (!localStoragePopulated) {
+        console.log("updating local storage...");
+        updateLocalStorage(globalState);
+      }
     }
   }, [donors.loadStatus]);
 
@@ -83,7 +86,9 @@ export default function CollectScreen() {
     setbrief(newBrief);
   }
 
-  return (
+  return donorConflict ? (
+    <DonorConflict />
+  ) : (
     <>
       <StatusBar currentStatus={statusStates.dataSaving} />
       <LoadedScreen loadStatus={donors.loadStatus}>

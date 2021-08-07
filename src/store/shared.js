@@ -2,7 +2,7 @@
 
 /*
   AsyncSlices are slices which depend upon data from the backend
-  Signature >>> {*loadStatus: 0|1|2|3, *data: Object (or other)}
+  Signature >>> {*loadStatus: 0|1|2|3, *data: Object (or other), isLoadedFromLS: boolean}
   Use Thunks to load Data. Once the data has been loaded, subsequent mutations will be done directly without contacting the server. Therefore, it is important that state is updated after the GOOD response from the backend!
 
   Following are the methods for These type of slices      
@@ -10,12 +10,20 @@
 // reducers
 export const asyncSliceReducers = {
   replace: (state, action) => {
-    //   action.payload >>>>> {new: Object (will be replaced with state.data)}
+    /*
+    action.payload >>>>>
+     { new: Object (will be replaced with state.data),
+       isLoadedFromLS: boolean (be default it is false unless you forcefull state it) }
+    */
     for (const key in action.payload.new) {
       state.data[key] = action.payload.new[key];
     }
-    // just dispatch, state will update automatically
+    //  whenever replaced, the async slice will be stated as "Successfully Loaded" ie. 2
     state.loadStatus = 2;
+    state.isLoadedFromLS =
+      action.payload.isLoadedFromLS !== undefined
+        ? action.payload.isLoadedFromLS
+        : false;
   },
   startLoading: (state) => {
     state.loadStatus = 1;
@@ -26,7 +34,11 @@ export const asyncSliceReducers = {
 };
 
 // initial state
-export const asyncSliceInitial = { loadStatus: 0, data: {} };
+export const asyncSliceInitial = {
+  loadStatus: 0,
+  data: {},
+  isLoadedFromLS: false,
+};
 
 // asyncloaderThuns
 
@@ -65,8 +77,22 @@ export function generateAsyncThunk(sliceName, actionsObj, asyncLoader) {
   };
 }
 
-// given the state, it will update the local storage
+// given the global state state, it will update the local storage
 export function updateLocalStorage(state) {
   localStorage.setItem("donors", JSON.stringify(state.donors.data));
   localStorage.setItem("donorDiff", JSON.stringify(state.donorDiff));
+}
+
+// gets the local storage status and corresponding valus
+export function getLS_Status() {
+  const donors = localStorage.getItem("donors");
+  const donorDiff = localStorage.getItem("donorDiff");
+  if (donors !== null) {
+    return [
+      true,
+      { donors: JSON.parse(donors), donorDiff: JSON.parse(donorDiff) },
+    ];
+  } else {
+    return [false, {}];
+  }
 }

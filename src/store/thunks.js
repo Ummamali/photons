@@ -3,9 +3,9 @@
 import { contributorsActions } from "./contributorsSlice";
 import { thisMonthActions } from "./thisMonthSlice";
 import { recentsActions } from "./recentsSlice";
-import donorDiffSlice, { donorDiffActions } from "./donorDiffSlice";
+import { donorDiffActions } from "./donorDiffSlice";
 import { donorsActions } from "./donorSlice";
-import { updateLocalStorage } from "./shared";
+import { getLS_Status, updateLocalStorage } from "./shared";
 
 /*
   Following thunks are used to add contributions and contributor
@@ -79,16 +79,24 @@ export function deleteDonor(donorName) {
   };
 }
 
-// loads donors from local storage
+/* 
+loads donors and donorDiff from local storage. Remember that if donors is in local storage, donorDiff must also be in local storage. There is no check for donorDiff presence!!! 
+*/
 export function loadDonorsDataFromLS() {
   return (dispatch) => {
-    const lsDonors = localStorage.getItem("donors");
-    if (lsDonors !== null) {
-      dispatch(donorsActions.replace({ new: JSON.parse(lsDonors) }));
-    }
-    const lsDonorsDiff = localStorage.getItem("donorsDiff");
-    if (lsDonorsDiff !== null) {
-      dispatch(donorDiffActions.replace({ new: JSON.parse(lsDonorsDiff) }));
+    const [LS_populated, LS_items] = getLS_Status();
+    if (LS_populated) {
+      // local storage contains state, now we are loading it in
+      // populating donor state
+      dispatch(
+        donorsActions.replace({
+          new: LS_items.donors,
+          isLoadedFromLS: true,
+        })
+      );
+      dispatch(donorDiffActions.replace({ new: LS_items.donorDiff }));
+    } else {
+      dispatch(donorsActions.failedLoading());
     }
   };
 }

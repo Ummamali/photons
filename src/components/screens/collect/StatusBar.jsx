@@ -70,3 +70,5 @@ export default function StatusBar({ currentStatus }) {
     </div>
   );
 }
+
+function mapToStatus() {}
