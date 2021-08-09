@@ -27,7 +27,6 @@ export default function CollectScreen() {
   // the donors slice works with this screen
   const globalState = useSelector((state) => state);
   const donors = globalState.donors;
-  const donorConflict = globalState.globalVariables.donorConflict;
   const dispatch = useDispatch();
 
   const [brief, setbrief] = useState({
@@ -46,11 +45,6 @@ export default function CollectScreen() {
   useEffect(() => {
     if (donors.loadStatus === 2) {
       updateResults();
-      const localStoragePopulated = localStorage.getItem("donors") !== null;
-      if (!localStoragePopulated) {
-        console.log("updating local storage...");
-        updateLocalStorage(globalState);
-      }
     }
   }, [donors.loadStatus]);
 
@@ -68,13 +62,13 @@ export default function CollectScreen() {
       money: 0,
       donors: 0,
     };
-    for (const donorObj of Object.values(donors.data)) {
+    for (const [donorId, donorObj] of Object.entries(donors.data)) {
       if (
         (donorObj.hasPaid && currCollectRadio === "SUCCESS") ||
         (!donorObj.hasPaid && currCollectRadio === "PENDING") ||
         currCollectRadio === "ALL"
       ) {
-        newResults.push(donorObj);
+        newResults.push({ donorId, donorObj });
         newBrief.money += donorObj.hasPaid ? 1 : 0;
         newBrief.total += donorObj.hasPaid ? donorObj.amount : 0;
       }
@@ -141,11 +135,11 @@ export default function CollectScreen() {
             </div>
             {results.length > 0 ? (
               <div className="results">
-                {results.map((donorObj) => (
+                {results.map((dataObj) => (
                   <CollectionCard
-                    donorObj={donorObj}
+                    {...dataObj}
                     mode={currModeRadio}
-                    key={donorObj.name}
+                    key={dataObj.donorId}
                   />
                 ))}
               </div>

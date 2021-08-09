@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { truncate } from "../../../utilFuncs/basics";
 import { deleteDonor } from "../../../store/thunks";
 
-const CollectionCard = ({ donorObj, mode }) => {
+const CollectionCard = ({ donorObj, mode, donorId }) => {
   let amountEl;
   const historyObj = useHistory();
   const dispatchStore = useDispatch();
@@ -33,7 +33,7 @@ const CollectionCard = ({ donorObj, mode }) => {
         <div className="flex items-center">
           <button
             className="bg-red-500 text-sm text-white text-opacity-80 py-1 px-3 mr-2"
-            onClick={() => dispatchStore(deleteDonor(donorObj.name))}
+            onClick={() => dispatchStore(deleteDonor(donorId))}
           >
             Delete
           </button>
@@ -53,9 +53,7 @@ const CollectionCard = ({ donorObj, mode }) => {
         {mode === "EDIT" && (
           <div className="flex flex-col justify-center border-l border-gray-300 pl-3 ml-2">
             <button
-              onClick={() =>
-                historyObj.push(`/collect/edit?name=${donorObj.name}`)
-              }
+              onClick={() => historyObj.push(`/collect/edit?id=${donorId}`)}
             >
               <i className="fas fa-pencil-alt text-yellow-700"></i>
             </button>

@@ -23,26 +23,32 @@ const vErrorMessages = {
   addAmount: "Invalid amount, must be greater than 0",
 };
 
+const validators = {
+  donorName: (value) => ({ isValid: value.length >= 5 && value.length < 34 }),
+  amount: (value) => ({ isValid: value > 0 }),
+  addAmount: (value) => ({ isValid: value > 0 }),
+};
+
 // Wrapper Component which should be imported
 export default function DonorEditModel() {
   const locationObj = useLocation();
   const searchParams = new URLSearchParams(locationObj.search);
-  const name = searchParams.get("name");
+  const donorId = searchParams.get("id");
 
   // getting donors from redux
   const donors = useSelector((state) => state.donors);
 
   // current donor object
-  const currDonor = donors.data[name];
+  const currDonor = donors.data[donorId];
   return currDonor === undefined ? (
     <Redirect to="/collect" />
   ) : (
-    <InternalEditModel donors={donors} currDonor={currDonor} />
+    <InternalEditModel currDonor={currDonor} currId={donorId} />
   );
 }
 
 // Internal component which will load if name is valid --------------------------------
-function InternalEditModel({ donors, currDonor }) {
+function InternalEditModel({ currDonor, currId }) {
   // history object to close
   const historyObj = useHistory();
 
@@ -61,21 +67,6 @@ function InternalEditModel({ donors, currDonor }) {
   const dispatchStore = useDispatch();
 
   // VALIDATIONS
-  // as the validators require the state therefore, they must be inside of the component
-  const validators = {
-    donorName: (value) => {
-      if (value.length >= 5 && value.length < 34) {
-        let available = !(value in donors.data);
-        available = value === currDonor.name ? true : available;
-        const msg = available ? null : "This name already exists, use another!";
-        return { isValid: available, msg };
-      } else {
-        return { isValid: false };
-      }
-    },
-    amount: (value) => ({ isValid: value > 0 }),
-    addAmount: (value) => ({ isValid: value > 0 }),
-  };
 
   const [validityStatuses, dispatchValidator, validateCore] = useValidator(
     vErrorMessages,
@@ -113,8 +104,8 @@ function InternalEditModel({ donors, currDonor }) {
     if (formIsValid) {
       dispatchStore(
         updateDonor(
-          getDonorFromFields({ donorName, donorDate, donorMoney }, paymentMode),
-          currDonor.name
+          currId,
+          getDonorFromFields({ donorName, donorDate, donorMoney }, paymentMode)
         )
       );
       historyObj.replace(`/collect`);

@@ -1,8 +1,7 @@
 // the donor slice >>> asyc slice
 import { createSlice } from "@reduxjs/toolkit";
 import { routes, joinURL } from "../configs";
-import { donorDiffActions, loadDonorDiffFromLS } from "./donorDiffSlice";
-import { globalVariablesActions } from "./globalVariablesSlice";
+import { donorDiffActions } from "./donorDiffSlice";
 import {
   asyncSliceReducers,
   asyncSliceInitial,
@@ -18,16 +17,15 @@ const donorSlice = createSlice({
     ...asyncSliceReducers,
     update: (state, action) => {
       // this is the UPDATE part of CRUD
-      delete state.data[action.payload.prevName];
-      state.data[action.payload.newDonor.name] = action.payload.newDonor;
+      state.data[action.payload.donorId] = action.payload.newDonorObj;
     },
     delete: (state, action) => {
       // deletes the given name from the diff state, this is DELETE part of CRUD
-      delete state.data[action.payload.donorName];
+      delete state.data[action.payload.donorId];
     },
     add: (state, action) => {
       // add a new donor to the slice its like CREATE
-      state.data[action.payload.newDonor.name] = action.payload.newDonor;
+      state.data[action.payload.id] = action.payload.newDonor;
     },
     isLoadedFromLS: (state, action) => {
       state.isLoadedFromLS = action.payload;

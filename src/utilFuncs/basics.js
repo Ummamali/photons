@@ -44,3 +44,11 @@ export function getDonorFromFields(allDataFields, paymentMode) {
   }
   return donorObj;
 }
+
+// this function generates a unique id for the donor depending upon hist time and name
+export function generateId(seedString) {
+  let id = Date.now().toString();
+  const name = seedString.split(" ");
+  id += name[0];
+  return id;
+}

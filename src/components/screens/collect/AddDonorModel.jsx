@@ -7,7 +7,7 @@ import useValidator, {
   syncValidateAll,
 } from "../../../hooks/useValidator";
 import { addDonor } from "../../../store/thunks";
-import { getDonorFromFields } from "../../../utilFuncs/basics";
+import { generateId, getDonorFromFields } from "../../../utilFuncs/basics";
 import ControlledFormGroup from "../../utils/ControlledFormGroup";
 import Model from "../../utils/Model";
 import ReqButton from "../../utils/ReqButton";
@@ -17,6 +17,11 @@ import PaymentInput, { getPaymentChangeHandler } from "./PaymentInput";
 const vIdentityList = {
   donorName: "Donor name must contain atleast 5 and atmost 34 characters",
   amount: "Invalid amount, must be greater than 0",
+};
+
+const validators = {
+  donorName: (value) => ({ isValid: value.length >= 5 && value.length < 34 }),
+  amount: (value) => ({ isValid: value > 0 }),
 };
 
 // Component -----------------------------
@@ -30,22 +35,8 @@ export default function AddDonorModel() {
   const [paymentMode, setPaymentMode] = useState("MONEY");
 
   // getting the donors for validations, as collectScreen is a LoadScreen, this donors stte will be populated already
-  const donors = useSelector((state) => state.donors);
   const dispatchStore = useDispatch();
 
-  // as the validators require the state therefore, they must be inside of the component
-  const validators = {
-    donorName: (value) => {
-      if (value.length >= 5 && value.length < 34) {
-        const available = !(value in donors.data);
-        const msg = available ? null : "This name already exists, use another!";
-        return { isValid: available, msg };
-      } else {
-        return { isValid: false };
-      }
-    },
-    amount: (value) => ({ isValid: value > 0 }),
-  };
   // validity statuses
   const [vStatuses, dispatchValidator, validateCore] = useValidator(
     vIdentityList,
@@ -70,9 +61,12 @@ export default function AddDonorModel() {
     }
     const formIsValid = syncValidateAll(formValues, validateCore);
     if (formIsValid) {
+      const id = generateId(formValues.donorName);
+      console.log(id);
       dispatchStore(
         addDonor(
-          getDonorFromFields({ donorName, donorMoney, donorDate }, paymentMode)
+          getDonorFromFields({ donorName, donorMoney, donorDate }, paymentMode),
+          id
         )
       );
       historyObj.replace(`/collect`);

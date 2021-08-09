@@ -6,16 +6,25 @@ const donorDiffSlice = createSlice({
   reducers: {
     update: (state, action) => {
       // UPDATE
-      delete state[action.payload.prevName];
-      state[action.payload.newDonor.name] = action.payload.newDonor;
+      const prev = state[action.payload.donorId];
+      state[action.payload.donorId] = {
+        ...prev,
+        ...action.payload.newDonorObj,
+      };
     },
     delete: (state, action) => {
       // deletes the given key from the diff state, this is DELETE
-      state[action.payload.donorName] = "DELETED";
+      state[action.payload.donorId] = "DELETED";
+    },
+    deletePermanent: (state, action) => {
+      // deletes the given key from the diff state, this is DELETE
+      delete state[action.payload.donorId];
     },
     add: (state, action) => {
       // add a new user to the slice, its like CREATE
-      state[action.payload.newDonor.name] = action.payload.newDonor;
+      const newDonor = { ...action.payload.newDonor };
+      newDonor.added = true;
+      state[action.payload.id] = newDonor;
     },
     reset: (state) => {
       // sets the state back to {}
@@ -30,6 +39,19 @@ const donorDiffSlice = createSlice({
     },
   },
 });
+
+export function deleteFromDonorDiff(donorId) {
+  return (dispatch, getState) => {
+    const deletingDonor = getState().donorDiff[donorId];
+    if (deletingDonor === undefined) {
+      dispatch(donorDiffActions.delete({ donorId }));
+    } else if (deletingDonor.added === true) {
+      dispatch(donorDiffActions.deletePermanent({ donorId }));
+    } else {
+      dispatch(donorDiffActions.delete({ donorId }));
+    }
+  };
+}
 
 export const donorDiffActions = donorDiffSlice.actions;
 

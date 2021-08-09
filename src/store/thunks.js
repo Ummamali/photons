@@ -3,7 +3,7 @@
 import { contributorsActions } from "./contributorsSlice";
 import { thisMonthActions } from "./thisMonthSlice";
 import { recentsActions } from "./recentsSlice";
-import { donorDiffActions } from "./donorDiffSlice";
+import { deleteFromDonorDiff, donorDiffActions } from "./donorDiffSlice";
 import { donorsActions } from "./donorSlice";
 import { getLS_Status, updateLocalStorage } from "./shared";
 
@@ -44,37 +44,30 @@ Followint thunks are for donors, the C(R)UD thunks
 */
 
 // the donor update thunk
-export function updateDonor(newDonorObj, donorPrevName) {
+export function updateDonor(donorId, newDonorObj) {
   return (dispatch, getState) => {
     // first changing the diff slice
-    dispatch(
-      donorDiffActions.update({
-        prevName: donorPrevName,
-        newDonor: newDonorObj,
-      })
-    );
+    dispatch(donorDiffActions.update({ donorId, newDonorObj }));
     // then changing the original slice
-    dispatch(
-      donorsActions.update({ prevName: donorPrevName, newDonor: newDonorObj })
-    );
+    dispatch(donorsActions.update({ donorId, newDonorObj }));
     updateLocalStorage(getState());
   };
 }
 
 // to add a new donor
-export function addDonor(newDonor) {
+export function addDonor(newDonor, id) {
   return (dispatch, getState) => {
-    dispatch(donorDiffActions.add({ newDonor }));
-    dispatch(donorsActions.add({ newDonor }));
+    dispatch(donorDiffActions.add({ newDonor, id }));
+    dispatch(donorsActions.add({ newDonor, id }));
     updateLocalStorage(getState());
   };
 }
 
 // deletes the donor
-export function deleteDonor(donorName) {
+export function deleteDonor(donorId) {
   return (dispatch, getState) => {
-    dispatch(donorDiffActions.delete({ donorName }));
-    dispatch(donorsActions.delete({ donorName }));
+    dispatch(deleteFromDonorDiff(donorId));
+    dispatch(donorsActions.delete({ donorId }));
     updateLocalStorage(getState());
   };
 }
