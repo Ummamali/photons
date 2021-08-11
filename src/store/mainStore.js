@@ -6,7 +6,6 @@ import thisMonthSlice from "./thisMonthSlice";
 import recentsSlice from "./recentsSlice";
 import donorSlice from "./donorSlice";
 import donorDiffSlice from "./donorDiffSlice";
-import globalVariablesSlice from "./globalVariablesSlice";
 
 const mainStore = configureStore({
   reducer: {
@@ -15,7 +14,6 @@ const mainStore = configureStore({
     recents: recentsSlice.reducer,
     donors: donorSlice.reducer,
     donorDiff: donorDiffSlice.reducer,
-    globalVariables: globalVariablesSlice.reducer,
   },
 });
 

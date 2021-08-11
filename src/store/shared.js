@@ -1,5 +1,7 @@
 // This is like a utility file to contain functionality for various slices
 
+import { donorDiffActions } from "./donorDiffSlice";
+
 /*
   AsyncSlices are slices which depend upon data from the backend
   Signature >>> {*loadStatus: 0|1|2|3, *data: Object (or other), isLoadedFromLS: boolean}
@@ -74,6 +76,13 @@ export function generateAsyncThunk(sliceName, actionsObj, asyncLoader) {
         console.log("loadFromServer silenced for " + sliceName);
       }
     };
+  };
+}
+
+export function resetDonorDiff() {
+  return (dispatch, getState) => {
+    dispatch(donorDiffActions.reset());
+    updateLocalStorage(getState());
   };
 }
 
