@@ -1,4 +1,4 @@
-# PHOTONS
+![PHOTONS](/src/media/logo.jpg)
 A modern frontend-driven CRUD application to store data about contributors, for fund-raising and various collection purposes.
 ## Features
 Fully Reactive interface to store data about permanent contributors, as well as temporary (one-time) contributors
