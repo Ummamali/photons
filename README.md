@@ -17,8 +17,8 @@ The application consists of following screens (interfaces)
 * Displays data about all the registered contributors
 * Name, Id and total amount 
 * Search a contributor by his id or name
-* Filter contributors 
-*   All
-*   Who have contributed the minimum amount decided for a month
-*   Who have not contributed the decided amount for current month
-* A list of all the contributions of a person, with the amount, time and date
+* Filter contributors as: 
+  * All
+  * Who have contributed the minimum amount decided for a month
+  * Who have not contributed the decided amount for current month
+* View a list of all contributions of a person, with the amount, time and date
