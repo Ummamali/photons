@@ -1,4 +1,5 @@
 ![PHOTONS](/src/media/doc_logo.svg)
+
 A modern frontend-driven CRUD application to store data about contributors, for fund-raising and various collection purposes.
 # Features
 Fully Reactive interface to store data about permanent contributors, as well as temporary (one-time) contributors
